@@ -1,0 +1,19 @@
+# "homepage": "https://blog.rolandw.dev/admin",
+version: '3'
+services:
+    # react frontend management ui for development
+    management:
+        # build: .
+        # https://github.com/facebook/create-react-app/issues/8688
+        stdin_open: true
+        image: management_dev
+        container_name: management_dev
+        expose:
+            - "4000"
+        volumes:
+          - ./frontend/src:/usr/src/app/src
+
+networks:
+    default:
+        external:
+            name: gateway_network
