@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { Collapsible } from "./styles";
 
-function DropdownButton(props) {
-	const { collapsed } = props;
+function DropdownButton(collapsed) {
 	return (
 		<FontAwesomeIcon
 			onClick={(e) => {
@@ -21,61 +20,50 @@ function DropdownButton(props) {
 /**
  *
  * @param {*} props
- * @param {*} name
- * @param {*} fetchDataCallback
- * @param {*} renderDataCallback
+ * @param {*} title
+ * @param {*} thingToRender
+ * @param {*} dataToRenderThingWith
  */
-function Dropdown(props) {
-	const [collapsed, setCollapsed] = useState(false);
-	const [buttonText, setButtonText] = useState(`Open ${props.name}`);
-	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState([]);
-	const [addFieldIndex, setAddFieldIndex] = useState(0);
-	const { _id } = props;
+function Dropdown({ children }) {
+	const [collapsed, setCollapsed] = useState(true);
+	// const [title, setTitle] = useState(`Open ${props.title}`);
+	const [title, setTitle] = useState(`Open temp`);
+	const [loading, setLoading] = useState(false);
 
-	const loadHistoryData = async () => {
-		if (!collapsed) {
-			const { data } = await props.fetchDataCallback(_id);
-			setData(data);
-			setLoading(false);
-		}
-	};
+	// const handleCollapser = (event) => {
+	// 	event.preventDefault();
+	// 	setCollapsed(!collapsed);
 
-	const handleCollapser = (event) => {
-		event.preventDefault();
-		setCollapsed(!collapsed);
+	// };
 
-		// get the target conent div to show/hide it
-		const content = event.target.closest("div").querySelector(".content");
-
-		if (collapsed) {
-			content.className = "content collapsed";
-			setButtonText(`Open ${props.name}`);
-		} else {
-			content.className = "content";
-			setButtonText(`Close ${props.name}`);
-			loadHistoryData();
-		}
-	};
+	React.useEffect(() => {
+		// const content = event.target.closest("div").querySelector(".content");
+		// if (collapsed) {
+		// 	content.className = "content collapsed";
+		// 	setTitle(`Open ${props.name}`);
+		// } else {
+		// 	content.className = "content";
+		// 	setTitle(`Close ${props.name}`);
+		// 	loadHistoryData();
+		// }
+		// console.table(collapsed);
+	}, [collapsed]);
 
 	return (
 		<Collapsible>
-			<a href={"/"} onClick={handleCollapser}>
-				{buttonText} <DropdownButton collapsed={collapsed} />
+			<a
+				href={"/"}
+				onClick={(e) => {
+					e.preventDefault();
+					setCollapsed(!collapsed);
+				}}
+			>
+				{title} <DropdownButton collapsed={collapsed} />
 			</a>
 
-			<div className="content collapsed">
-				{!loading &&
-					data.map((data, index) => {
-						console.log(`redering ${props.name} dropdown`);
-						return props.renderDataCallback(data, _id, index);
-					})}
-
-				{!loading &&
-					props.addField &&
-					props.renderAddFieldCallback(addFieldIndex)}
-
-				{!loading && data.length === 0 && `No data found.`}
+			<div className={collapsed ? "content collapsed" : "content"}>
+				{/* this displays the children of Dropdown */}
+				{!loading && children}
 			</div>
 		</Collapsible>
 	);
