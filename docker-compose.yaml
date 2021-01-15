@@ -3,10 +3,11 @@ version: '3'
 services:
     # react frontend management ui for development
     management:
-        # build: .
+        build: 
+            context: .
+            dockerfile: dockerfile.dev
         # https://github.com/facebook/create-react-app/issues/8688
         stdin_open: true
-        image: management_dev
         container_name: management_dev
         expose:
             - "4000"
