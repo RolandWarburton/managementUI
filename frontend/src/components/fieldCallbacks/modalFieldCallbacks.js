@@ -1,10 +1,10 @@
-const modalSaveButtonCallback = async (values, _id) => {
+const modalSaveButtonCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
 
 	const filter = { _id: _id };
 
-	const update = { $set: { [currentValue]: newValue } };
+	const update = { [name]: newValue };
 
 	// print them out for debugging
 	console.log(`filter: ${JSON.stringify(filter)}`);

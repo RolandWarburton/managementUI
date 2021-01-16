@@ -82,31 +82,31 @@ export default function Model(props) {
 		// a template that defines each field to load in
 		const formFields = [
 			{
-				name: "ID",
+				title: "ID",
 				fieldName: "_id",
 				value: props._id,
 				disabled: true,
 			},
 			{
-				name: "Page Name",
+				title: "Page Name",
 				fieldName: "pageName",
 				value: props.pageName,
 				disabled: false,
 			},
 			{
-				name: "Website Path",
+				title: "Website Path",
 				fieldName: "websitePath",
 				value: props.websitePath,
 				disabled: false,
 			},
 			{
-				name: "Hidden",
+				title: "Hidden",
 				fieldName: "hidden",
 				value: props.hidden,
 				disabled: false,
 			},
 			{
-				name: "Revision",
+				title: "Revision",
 				fieldName: "__v",
 				value: props.__v,
 				history: props.history,
@@ -122,7 +122,8 @@ export default function Model(props) {
 						_id={_id}
 						initialMode={"display"}
 						value={field.value}
-						title={field.name}
+						title={field.title}
+						name={field.fieldName}
 						key={_id + i}
 						saveButtonCallback={modalSaveButtonCallback}
 						editButtonCallback={() => {}}
@@ -131,17 +132,6 @@ export default function Model(props) {
 						deleteButtonCallback={() => {}}
 						undoButtonCallback={() => {}}
 					/>
-					// <PageEditField
-					// 	name={field.name}
-					// 	fieldName={field.fieldName}
-					// 	value={field.value}
-					// 	key={props._id + i}
-					// 	_id={props._id}
-					// 	disabled={field.disabled}
-					// 	deletable={false}
-					// 	color={"#282C34"}
-					// 	formCallback={formCallback}
-					// />
 				);
 			});
 			setFields(fields);

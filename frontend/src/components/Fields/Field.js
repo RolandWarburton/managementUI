@@ -9,6 +9,7 @@ const Field = (props) => {
 		initialMode,
 		value,
 		title,
+		name,
 		saveButtonCallback,
 		closeButtonCallback,
 		undoButtonCallback,
@@ -52,7 +53,8 @@ const Field = (props) => {
 
 							const newCurrentValue = await saveButtonCallback(
 								stateRef.current,
-								_id
+								_id,
+								name
 							);
 
 							// check if the response was an error
@@ -83,14 +85,14 @@ const Field = (props) => {
 							// 3. trigger the saveCallback function prop which passes this state back to <Modal> to handle
 							setMode("display");
 							setNewValue(currentValue);
-							closeButtonCallback(stateRef.current, _id);
+							closeButtonCallback(stateRef.current, _id, name);
 						}}
 						onChangeCallback={(fieldString) => {
 							// when the field changes:
 							// 1. update the fields newValue state
 							// 2. trigger onChangeCallback function prop which passes this state back to <Modal> to handle
 							setNewValue(fieldString);
-							onChangeCallback(stateRef.current, _id);
+							onChangeCallback(stateRef.current, _id, name);
 						}}
 					/>
 				);
