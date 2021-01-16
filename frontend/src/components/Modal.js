@@ -3,43 +3,18 @@ import Dropdown from "./dropdowns/Dropdown";
 import { Button } from "@material-ui/core";
 import "../styles/styles.scss";
 import Edit from "./Fields/Edit";
+import {
+	sourceSaveButtonHandler,
+	sourceUndoButtonHandler,
+	sourceAddButtonHandler,
+} from "./fieldCallbacks/sourceDropdownCallbacks";
+
+import { modalSaveButtonCallback } from "./fieldCallbacks/modalFieldCallbacks";
 
 import PageEditField from "./pageEditField/PageEditField";
 import Field from "./Fields/Field";
 
 // callback to update the main fields
-const formCallback = async (fieldState, avoid, push) => {
-	const { _id, fieldName, newValue } = fieldState;
-	// UPDATE WHERE SELECT _id IS _id
-	const filter = { _id: _id };
-
-	// SET source.url = newValue
-	const update = { [fieldName]: push };
-
-	// print them out for debugging
-	console.log(`filter: ${JSON.stringify(filter)}`);
-	console.log(`update: ${JSON.stringify(update)}`);
-
-	// construct the body request
-	const body = {
-		filter: filter,
-		update: update,
-	};
-
-	// stringify it for the POST request
-	console.log("stringifying the body");
-	const bodyString = JSON.stringify(body);
-
-	// send the post request
-	const url = `/api/v1/watch/update/${_id}`;
-	return fetch(url, {
-		method: "PATCH",
-		headers: {
-			"Content-type": "application/json; charset=UTF-8",
-		},
-		body: bodyString,
-	});
-};
 
 const getPage = async (_id) => {
 	const url = `/api/v1/watch/page?_id=${_id}`;
@@ -65,128 +40,6 @@ const deletePageHandler = async (_id) => {
 	return result;
 };
 
-const saveButtonHandler = async (values, _id) => {
-	// extract the values
-	const { firstValue, currentValue, newValue } = values;
-
-	// construct the url
-	const url = `/api/v1/watch/update/${_id}`;
-
-	// mongo style filter
-	const filter = {
-		_id: _id,
-		"source.url": currentValue,
-	};
-
-	// mongo style update
-	const update = {
-		$set: { "source.$.url": newValue, "source.$.remote": true },
-	};
-
-	// create the options for the request
-	const options = {
-		method: "PATCH",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			filter: filter,
-			update: update,
-		}),
-	};
-
-	// do the request
-	try {
-		const response = await fetch(url, options);
-
-		if (response.status !== 200) {
-			throw new Error("Response status was not 200");
-		} else {
-			return newValue;
-		}
-	} catch (err) {
-		return err;
-	}
-};
-
-const undoButtonHandler = async (values, _id) => {
-	// extract the values
-	const { firstValue, currentValue, newValue } = values;
-
-	// construct the url
-	const url = `/api/v1/watch/update/${_id}`;
-
-	// mongo style filter
-	const filter = {
-		_id: _id,
-	};
-
-	// mongo style update
-	const update = {
-		source: [
-			{
-				url: firstValue,
-			},
-		],
-	};
-
-	// create the options for the request
-	const options = {
-		method: "PATCH",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			filter: filter,
-			update: update,
-		}),
-	};
-
-	// do the request
-	try {
-		const response = await fetch(url, options);
-
-		if (response.status !== 200)
-			throw new Error("Response status was not 200");
-		return currentValue;
-	} catch (err) {
-		return newValue;
-	}
-};
-
-const addButtonHandler = async (values, _id) => {
-	// extract the values
-	const { firstValue, currentValue, newValue } = values;
-
-	// construct the url
-	const url = `/api/v1/watch/update/source/${_id}`;
-
-	// create the options for the request
-	const options = {
-		method: "PATCH",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			url: newValue,
-			remote: "true",
-		}),
-	};
-
-	// do the request
-	try {
-		const response = await fetch(url, options);
-
-		if (response.status !== 200) {
-			throw new Error("Response status was not 200");
-		} else {
-			return newValue;
-		}
-	} catch (err) {
-		return err;
-	}
-};
-
 const deleteButtonHandler = async (values, _id) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
@@ -200,12 +53,12 @@ const renderAddField = (_id) => {
 			value={""}
 			title="title"
 			key={`${_id}_add`}
-			saveButtonCallback={addButtonHandler}
+			saveButtonCallback={sourceAddButtonHandler}
 			closeButtonCallback={(props) => {
 				const { firstValue, currentValue, newValue } = props;
 				console.log("closeButtonCallback callback");
 			}}
-			undoButtonCallback={undoButtonHandler}
+			undoButtonCallback={sourceUndoButtonHandler}
 			editButtonCallback={(props) => {
 				const { firstValue, currentValue, newValue } = props;
 				console.log("editButtonCallback callback");
@@ -265,17 +118,30 @@ export default function Model(props) {
 		if (!open) {
 			const fields = formFields.map((field, i) => {
 				return (
-					<PageEditField
-						name={field.name}
-						fieldName={field.fieldName}
+					<Field
+						_id={_id}
+						initialMode={"display"}
 						value={field.value}
-						key={props._id + i}
-						_id={props._id}
-						disabled={field.disabled}
-						deletable={false}
-						color={"#282C34"}
-						formCallback={formCallback}
+						title={field.name}
+						key={_id + i}
+						saveButtonCallback={modalSaveButtonCallback}
+						editButtonCallback={() => {}}
+						closeButtonCallback={() => {}}
+						onChangeCallback={() => {}}
+						deleteButtonCallback={() => {}}
+						undoButtonCallback={() => {}}
 					/>
+					// <PageEditField
+					// 	name={field.name}
+					// 	fieldName={field.fieldName}
+					// 	value={field.value}
+					// 	key={props._id + i}
+					// 	_id={props._id}
+					// 	disabled={field.disabled}
+					// 	deletable={false}
+					// 	color={"#282C34"}
+					// 	formCallback={formCallback}
+					// />
 				);
 			});
 			setFields(fields);
@@ -292,7 +158,7 @@ export default function Model(props) {
 						value={source.url}
 						title="title"
 						key={`${_id}_${index}`}
-						saveButtonCallback={saveButtonHandler}
+						saveButtonCallback={sourceSaveButtonHandler}
 						closeButtonCallback={(props) => {
 							const {
 								firstValue,
@@ -302,7 +168,7 @@ export default function Model(props) {
 
 							console.log("closeButtonCallback callback");
 						}}
-						undoButtonCallback={undoButtonHandler}
+						undoButtonCallback={sourceUndoButtonHandler}
 						editButtonCallback={(props) => {
 							const {
 								firstValue,
