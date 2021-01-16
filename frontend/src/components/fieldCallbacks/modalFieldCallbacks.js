@@ -30,4 +30,48 @@ const modalSaveButtonCallback = async (values, _id, name) => {
 	else return await newValue;
 };
 
-export { modalSaveButtonCallback };
+const modalUndoButtonHandler = async (values, _id, name) => {
+	// extract the values
+	const { firstValue, currentValue, newValue } = values;
+
+	// construct the url
+	const url = `/api/v1/watch/update/${_id}`;
+
+	// mongo style filter
+	const filter = {
+		_id: _id,
+		[name]: currentValue,
+	};
+
+	// mongo style update
+	const update = {
+		$set: {
+			[name]: firstValue,
+		},
+	};
+
+	// create the options for the request
+	const options = {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			filter: filter,
+			update: update,
+		}),
+	};
+
+	// do the request
+	try {
+		const response = await fetch(url, options);
+
+		if (response.status !== 200)
+			throw new Error("Response status was not 200");
+		return currentValue;
+	} catch (err) {
+		return newValue;
+	}
+};
+
+export { modalSaveButtonCallback, modalUndoButtonHandler };

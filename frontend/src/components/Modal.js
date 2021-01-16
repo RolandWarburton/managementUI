@@ -9,7 +9,10 @@ import {
 	sourceAddButtonHandler,
 } from "./fieldCallbacks/sourceDropdownCallbacks";
 
-import { modalSaveButtonCallback } from "./fieldCallbacks/modalFieldCallbacks";
+import {
+	modalSaveButtonCallback,
+	modalUndoButtonHandler,
+} from "./fieldCallbacks/modalFieldCallbacks";
 
 import PageEditField from "./pageEditField/PageEditField";
 import Field from "./Fields/Field";
@@ -124,13 +127,30 @@ export default function Model(props) {
 						value={field.value}
 						title={field.title}
 						name={field.fieldName}
+						disabled={field.disabled}
 						key={_id + i}
 						saveButtonCallback={modalSaveButtonCallback}
-						editButtonCallback={() => {}}
-						closeButtonCallback={() => {}}
-						onChangeCallback={() => {}}
-						deleteButtonCallback={() => {}}
-						undoButtonCallback={() => {}}
+						editButtonCallback={() => {
+							// console.log(
+							// 	"editButtonCallback function not implemented"
+							// );
+						}}
+						closeButtonCallback={() => {
+							// console.log(
+							// 	"closeButtonCallback function not implemented"
+							// );
+						}}
+						onChangeCallback={() => {
+							// console.log(
+							// 	"onChangeCallback function not implemented"
+							// );
+						}}
+						deleteButtonCallback={() => {
+							console.log(
+								"deleteButtonCallback function not implemented"
+							);
+						}}
+						undoButtonCallback={modalUndoButtonHandler}
 					/>
 				);
 			});
@@ -148,36 +168,25 @@ export default function Model(props) {
 						value={source.url}
 						title="title"
 						name={"source"}
+						disabled={false}
 						key={`${_id}_${index}`}
 						saveButtonCallback={sourceSaveButtonHandler}
 						closeButtonCallback={(props) => {
-							const {
-								firstValue,
-								currentValue,
-								newValue,
-							} = props;
-
-							console.log("closeButtonCallback callback");
+							// console.log(
+							// 	"closeButtonCallback function not implemented"
+							// );
 						}}
 						undoButtonCallback={sourceUndoButtonHandler}
 						editButtonCallback={(props) => {
-							const {
-								firstValue,
-								currentValue,
-								newValue,
-							} = props;
-
-							console.log("editButtonCallback callback");
+							// console.log(
+							// 	"editButtonCallback function not implemented"
+							// );
 						}}
 						deleteButtonCallback={deleteButtonHandler}
 						onChangeCallback={(props) => {
-							const {
-								firstValue,
-								currentValue,
-								newValue,
-							} = props;
-
-							console.log("on change callback");
+							// console.log(
+							// 	"onChangeCallback function not implemented"
+							// );
 						}}
 					/>
 				);

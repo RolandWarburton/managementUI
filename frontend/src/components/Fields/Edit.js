@@ -21,9 +21,12 @@ function Edit(props) {
 	const {
 		currentValue,
 		disabled,
+		saveButton,
+		cancelButton,
 		saveButtonCallback,
 		closeButtonCallback,
 		onChangeCallback,
+		children,
 	} = props;
 
 	return (
@@ -40,26 +43,7 @@ function Edit(props) {
 			/>
 
 			{/* Button group */}
-			<div className="buttons">
-				{/* save button */}
-				<button className="button is-text" onClick={saveButtonCallback}>
-					<FontAwesomeIcon
-						className="has-text-right icon"
-						icon={faSave}
-					/>
-				</button>
-
-				{/* cancel button */}
-				<button
-					className="button is-text"
-					onClick={closeButtonCallback}
-				>
-					<FontAwesomeIcon
-						className="has-text-right icon"
-						icon={faTimesCircle}
-					/>
-				</button>
-			</div>
+			<div className="buttons">{children}</div>
 		</Container>
 	);
 }
