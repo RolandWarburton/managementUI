@@ -147,6 +147,7 @@ export default function Model(props) {
 						initialMode="display"
 						value={source.url}
 						title="title"
+						name={"source"}
 						key={`${_id}_${index}`}
 						saveButtonCallback={sourceSaveButtonHandler}
 						closeButtonCallback={(props) => {
