@@ -48,30 +48,8 @@ const deleteButtonHandler = async (values, _id) => {
 	const { firstValue, currentValue, newValue } = values;
 };
 
-const renderAddField = (_id) => {
-	return (
-		<Field
-			_id={_id}
-			initialMode="add"
-			value={""}
-			title="title"
-			key={`${_id}_add`}
-			saveButtonCallback={sourceAddButtonHandler}
-			closeButtonCallback={(props) => {
-				const { firstValue, currentValue, newValue } = props;
-				console.log("closeButtonCallback callback");
-			}}
-			undoButtonCallback={sourceUndoButtonHandler}
-			editButtonCallback={(props) => {
-				const { firstValue, currentValue, newValue } = props;
-				console.log("editButtonCallback callback");
-			}}
-			onChangeCallback={(props) => {
-				const { firstValue, currentValue, newValue } = props;
-				console.log("on change callback");
-			}}
-		/>
-	);
+const notImplemented = (functionName) => {
+	return functionName + " function not implemented";
 };
 
 export default function Model(props) {
@@ -126,30 +104,14 @@ export default function Model(props) {
 						initialMode={"display"}
 						value={field.value}
 						title={field.title}
-						name={field.fieldName}
+						fieldName={field.fieldName}
 						disabled={field.disabled}
 						key={_id + i}
 						saveButtonCallback={modalSaveButtonCallback}
-						editButtonCallback={() => {
-							// console.log(
-							// 	"editButtonCallback function not implemented"
-							// );
-						}}
-						closeButtonCallback={() => {
-							// console.log(
-							// 	"closeButtonCallback function not implemented"
-							// );
-						}}
-						onChangeCallback={() => {
-							// console.log(
-							// 	"onChangeCallback function not implemented"
-							// );
-						}}
-						deleteButtonCallback={() => {
-							console.log(
-								"deleteButtonCallback function not implemented"
-							);
-						}}
+						editButtonCallback={notImplemented}
+						closeButtonCallback={notImplemented}
+						onChangeCallback={notImplemented}
+						deleteButtonCallback={notImplemented}
 						undoButtonCallback={modalUndoButtonHandler}
 					/>
 				);
@@ -160,39 +122,22 @@ export default function Model(props) {
 		// if the modal is opening load in the sources for it (for the dropdown)
 		if (!open) {
 			const page = await getPage(_id);
-			const sources = await page.source.map((source, index) => {
-				return (
-					<Field
-						_id={_id}
-						initialMode="display"
-						value={source.url}
-						title="title"
-						name={"source"}
-						disabled={false}
-						key={`${_id}_${index}`}
-						saveButtonCallback={sourceSaveButtonHandler}
-						closeButtonCallback={(props) => {
-							// console.log(
-							// 	"closeButtonCallback function not implemented"
-							// );
-						}}
-						undoButtonCallback={sourceUndoButtonHandler}
-						editButtonCallback={(props) => {
-							// console.log(
-							// 	"editButtonCallback function not implemented"
-							// );
-						}}
-						deleteButtonCallback={deleteButtonHandler}
-						onChangeCallback={(props) => {
-							// console.log(
-							// 	"onChangeCallback function not implemented"
-							// );
-						}}
-					/>
-				);
-			});
-			sources.push(renderAddField(_id));
-			setSource(sources);
+			setSource([...page.source]);
+
+			// add one more source to render as the "add field"
+			if (
+				!source.some((pageSource) => pageSource.initialMode === "add")
+			) {
+				setSource([
+					...page.source,
+					{
+						url: "",
+						remote: true,
+						initialMode: "add",
+					},
+				]);
+			}
+			console.log(source);
 		}
 	};
 
@@ -239,8 +184,80 @@ export default function Model(props) {
 						{fields.map((f) => f)}
 						<Dropdown title="test">
 							{open && source.length > 0
-								? source.map((field) => {
-										return field;
+								? source.map((pageSource, index) => {
+										return (
+											<Field
+												_id={_id}
+												initialMode={
+													pageSource.initialMode ||
+													"display"
+												}
+												value={pageSource.url}
+												title="title"
+												fieldName={"source"}
+												disabled={false}
+												key={`${_id}_${index}`}
+												saveButtonCallback={async (
+													values,
+													_id,
+													fieldName
+												) => {
+													if (
+														pageSource.initialMode ==
+														"add"
+													) {
+														await sourceAddButtonHandler(
+															values,
+															_id,
+															fieldName
+														);
+													} else {
+														await sourceSaveButtonHandler(
+															values,
+															_id,
+															fieldName
+														);
+													}
+
+													console.log(source);
+
+													if (
+														!source.some(
+															(pageSource) =>
+																pageSource.initialMode ===
+																"add"
+														)
+													) {
+														setSource([
+															...source,
+															{
+																url: "",
+																remote: true,
+																initialMode:
+																	"add",
+															},
+														]);
+													}
+
+													return values.newValue;
+												}}
+												closeButtonCallback={
+													notImplemented
+												}
+												undoButtonCallback={
+													sourceUndoButtonHandler
+												}
+												editButtonCallback={
+													notImplemented
+												}
+												deleteButtonCallback={
+													deleteButtonHandler
+												}
+												onChangeCallback={
+													notImplemented
+												}
+											/>
+										);
 								  })
 								: "loading"}
 						</Dropdown>
