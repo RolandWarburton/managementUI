@@ -17,20 +17,8 @@ import {
 
 import PageEditField from "../pageEditField/PageEditField";
 import Field from "../Fields/Field";
-
+import SourceFields from "./modalSourceFields";
 // callback to update the main fields
-
-const getPage = async (_id) => {
-	const url = `/api/v1/watch/page?_id=${_id}`;
-	const response = await fetch(url, { method: "GET" });
-
-	if (response.status !== 200) {
-		throw new Error(`Response to ${url} returned a non 200 status`);
-	}
-
-	const json = await response.json();
-	return json;
-};
 
 const deletePageHandler = async (_id) => {
 	const postURL = `/api/v1/watch/delete/${_id}`;
@@ -44,13 +32,8 @@ const deletePageHandler = async (_id) => {
 	return result;
 };
 
-const deleteButtonHandler = async (values, _id) => {
-	// extract the values
-	const { firstValue, currentValue, newValue } = values;
-};
-
 const notImplemented = (functionName) => {
-	return functionName + " function not implemented";
+	return "Function not implemented";
 };
 
 export default function Model(props) {
@@ -59,84 +42,70 @@ export default function Model(props) {
 	const [source, setSource] = useState([]);
 	const { _id } = props.data.original;
 
-	useEffect(() => {
-		async function handleModal() {
-			// a template that defines each field to load in
-			const formFields = [
-				{
-					title: "ID",
-					fieldName: "_id",
-					value: props._id,
-					disabled: true,
-				},
-				{
-					title: "Page Name",
-					fieldName: "pageName",
-					value: props.pageName,
-					disabled: false,
-				},
-				{
-					title: "Website Path",
-					fieldName: "websitePath",
-					value: props.websitePath,
-					disabled: false,
-				},
-				{
-					title: "Hidden",
-					fieldName: "hidden",
-					value: props.hidden,
-					disabled: false,
-				},
-				{
-					title: "Revision",
-					fieldName: "__v",
-					value: props.__v,
-					history: props.history,
-					disabled: true,
-				},
-			];
+	async function handleModal() {
+		// a template that defines each field to load in
+		const formFields = [
+			{
+				title: "ID",
+				fieldName: "_id",
+				value: props._id,
+				disabled: true,
+			},
+			{
+				title: "Page Name",
+				fieldName: "pageName",
+				value: props.pageName,
+				disabled: false,
+			},
+			{
+				title: "Website Path",
+				fieldName: "websitePath",
+				value: props.websitePath,
+				disabled: false,
+			},
+			{
+				title: "Hidden",
+				fieldName: "hidden",
+				value: props.hidden,
+				disabled: false,
+			},
+			{
+				title: "Revision",
+				fieldName: "__v",
+				value: props.__v,
+				history: props.history,
+				disabled: true,
+			},
+		];
 
-			// if the modal is opening load in the fields for it
-			if (!open) {
-				const fields = formFields.map((field, i) => {
-					return (
-						<Field
-							_id={_id}
-							initialMode={"display"}
-							value={field.value}
-							title={field.title}
-							fieldName={field.fieldName}
-							disabled={field.disabled}
-							key={_id + i}
-							saveButtonCallback={modalSaveButtonCallback}
-							editButtonCallback={notImplemented}
-							closeButtonCallback={notImplemented}
-							onChangeCallback={notImplemented}
-							deleteButtonCallback={notImplemented}
-							undoButtonCallback={modalUndoButtonHandler}
-						/>
-					);
-				});
-				setFields(fields);
-			}
-
-			// if the modal is opening load in the sources for it (for the dropdown)
-			if (!open) {
-				const page = await getPage(_id);
-				setSource(page.source);
-
-				// append an extra "add" field
-				setSource([
-					...page.source,
-					{
-						url: "",
-						remote: true,
-						initialMode: "add",
-					},
-				]);
-			}
+		// if the modal is opening load in the fields for it
+		if (open) {
+			setFields([]);
+			const fields = formFields.map((field, i) => {
+				return (
+					<Field
+						_id={_id}
+						initialMode={"display"}
+						value={field.value}
+						title={field.title}
+						fieldName={field.fieldName}
+						disabled={field.disabled}
+						key={_id + i}
+						saveButtonCallback={modalSaveButtonCallback}
+						editButtonCallback={notImplemented}
+						closeButtonCallback={notImplemented}
+						onChangeCallback={notImplemented}
+						deleteButtonCallback={notImplemented}
+						undoButtonCallback={modalUndoButtonHandler}
+					/>
+				);
+			});
+			setFields(fields);
 		}
+	}
 
+	// when the modal is opened refresh the field data
+	useEffect(() => {
 		handleModal();
 	}, [open]);
 
@@ -180,126 +149,7 @@ export default function Model(props) {
 						{/* print out every form field for this modal */}
 						{fields.map((f) => f)}
 						<Dropdown title="test">
-							{open && source.length > 0
-								? source.map((pageSource, index) => {
-										return (
-											<Field
-												_id={_id}
-												initialMode={
-													pageSource.initialMode ||
-													"display"
-												}
-												value={pageSource.url}
-												title="title"
-												fieldName={"source"}
-												disabled={false}
-												key={`${_id}_${index}`}
-												saveButtonCallback={async (
-													values,
-													_id,
-													fieldName
-												) => {
-													if (
-														pageSource.initialMode ==
-														"add"
-													) {
-														await sourceAddButtonHandler(
-															values,
-															_id,
-															fieldName
-														);
-
-														// set all source dropdown fields initialMode to "display" and append a new field with initialMode "add"
-														setSource([
-															...source.map(
-																(s) => {
-																	return {
-																		url:
-																			s.url,
-																		remote: true,
-																		initialMode:
-																			"display",
-																	};
-																}
-															),
-															{
-																url: "",
-																remote: true,
-																initialMode:
-																	"add",
-															},
-														]);
-													} else {
-														await sourceSaveButtonHandler(
-															values,
-															_id,
-															fieldName
-														);
-													}
-
-													console.log(source);
-
-													if (
-														!source.some(
-															(pageSource) =>
-																pageSource.initialMode ===
-																"add"
-														)
-													) {
-														setSource([
-															...source,
-															{
-																url: "",
-																remote: true,
-																initialMode:
-																	"add",
-															},
-														]);
-													}
-
-													return values.newValue;
-												}}
-												closeButtonCallback={
-													notImplemented
-												}
-												undoButtonCallback={
-													sourceUndoButtonHandler
-												}
-												editButtonCallback={
-													notImplemented
-												}
-												deleteButtonCallback={async (
-													values,
-													_id,
-													fieldName
-												) => {
-													await sourceDeleteButtonHandler(
-														values,
-														_id,
-														fieldName
-													);
-													const page = await getPage(
-														_id
-													);
-													setSource(page.source);
-
-													// append an extra "add" field
-													setSource([
-														...page.source,
-														{
-															url: "",
-															remote: true,
-															initialMode: "add",
-														},
-													]);
-												}}
-												onChangeCallback={
-													notImplemented
-												}
-											/>
-										);
-								  })
-								: "loading"}
+							<SourceFields open={open} _id={_id}></SourceFields>
 						</Dropdown>
 					</section>
 					<footer className="modal-card-foot">
