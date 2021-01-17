@@ -200,7 +200,11 @@ const Field = (props) => {
 									// when we delete
 									// 1. trigger the deleteCallback
 									console.log("delete");
-									deleteButtonCallback(stateRef.current, _id);
+									deleteButtonCallback(
+										stateRef.current,
+										_id,
+										fieldName
+									);
 								}}
 							>
 								<FontAwesomeIcon

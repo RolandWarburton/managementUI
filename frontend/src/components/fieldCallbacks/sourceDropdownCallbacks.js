@@ -86,6 +86,56 @@ const sourceUndoButtonHandler = async (values, _id, name) => {
 	}
 };
 
+const sourceDeleteButtonHandler = async (values, _id, name) => {
+	// extract the values
+	const { firstValue, currentValue, newValue } = values;
+
+	// construct the url
+	const url = `/api/v1/watch/update/${_id}`;
+
+	// mongo style filter
+	const filter = {
+		_id: _id,
+	};
+
+	// https://muffinman.io/blog/json-stringify-removes-undefined/
+	const replacer = (key, value) =>
+		typeof value === "undefined" ? null : value;
+
+	// mongo style update
+	const update = {
+		$pullAll: {
+			source: [{ url: currentValue, remote: true }],
+		},
+	};
+
+	// create the options for the request
+	const options = {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(
+			{
+				filter: filter,
+				update: update,
+			},
+			replacer
+		),
+	};
+
+	// do the request
+	try {
+		const response = await fetch(url, options);
+		if (response.status !== 200)
+			throw new Error("Response status was not 200");
+		console.log("deleted done");
+		return true;
+	} catch (err) {
+		return false;
+	}
+};
+
 const sourceAddButtonHandler = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
@@ -123,4 +173,5 @@ export {
 	sourceSaveButtonHandler,
 	sourceUndoButtonHandler,
 	sourceAddButtonHandler,
+	sourceDeleteButtonHandler,
 };
