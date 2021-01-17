@@ -1,21 +1,22 @@
-import React, { useState } from "react";
-import Dropdown from "./dropdowns/Dropdown";
+import React, { useEffect, useState } from "react";
+import Dropdown from "../dropdowns/Dropdown";
 import { Button } from "@material-ui/core";
-import "../styles/styles.scss";
-import Edit from "./Fields/Edit";
+import "../../styles/styles.scss";
+import Edit from "../Fields/Edit";
 import {
 	sourceSaveButtonHandler,
 	sourceUndoButtonHandler,
 	sourceAddButtonHandler,
-} from "./fieldCallbacks/sourceDropdownCallbacks";
+	sourceDeleteButtonHandler,
+} from "../fieldCallbacks/sourceDropdownCallbacks";
 
 import {
 	modalSaveButtonCallback,
 	modalUndoButtonHandler,
-} from "./fieldCallbacks/modalFieldCallbacks";
+} from "../fieldCallbacks/modalFieldCallbacks";
 
-import PageEditField from "./pageEditField/PageEditField";
-import Field from "./Fields/Field";
+import PageEditField from "../pageEditField/PageEditField";
+import Field from "../Fields/Field";
 
 // callback to update the main fields
 
@@ -58,83 +59,86 @@ export default function Model(props) {
 	const [source, setSource] = useState([]);
 	const { _id } = props.data.original;
 
-	// toggle the modal
-	const handleModalToggle = async () => {
-		// a template that defines each field to load in
-		const formFields = [
-			{
-				title: "ID",
-				fieldName: "_id",
-				value: props._id,
-				disabled: true,
-			},
-			{
-				title: "Page Name",
-				fieldName: "pageName",
-				value: props.pageName,
-				disabled: false,
-			},
-			{
-				title: "Website Path",
-				fieldName: "websitePath",
-				value: props.websitePath,
-				disabled: false,
-			},
-			{
-				title: "Hidden",
-				fieldName: "hidden",
-				value: props.hidden,
-				disabled: false,
-			},
-			{
-				title: "Revision",
-				fieldName: "__v",
-				value: props.__v,
-				history: props.history,
-				disabled: true,
-			},
-		];
-
-		// if the modal is opening load in the fields for it
-		if (!open) {
-			const fields = formFields.map((field, i) => {
-				return (
-					<Field
-						_id={_id}
-						initialMode={"display"}
-						value={field.value}
-						title={field.title}
-						fieldName={field.fieldName}
-						disabled={field.disabled}
-						key={_id + i}
-						saveButtonCallback={modalSaveButtonCallback}
-						editButtonCallback={notImplemented}
-						closeButtonCallback={notImplemented}
-						onChangeCallback={notImplemented}
-						deleteButtonCallback={notImplemented}
-						undoButtonCallback={modalUndoButtonHandler}
-					/>
-				);
-			});
-			setFields(fields);
-		}
-
-		// if the modal is opening load in the sources for it (for the dropdown)
-		if (!open) {
-			const page = await getPage(_id);
-			setSource(page.source);
-
-			// append an extra "add" field
-			setSource([
-				...page.source,
+	useEffect(() => {
+		async function handleModal() {
+			// a template that defines each field to load in
+			const formFields = [
 				{
-					url: "",
-					remote: true,
-					initialMode: "add",
+					title: "ID",
+					fieldName: "_id",
+					value: props._id,
+					disabled: true,
 				},
-			]);
+				{
+					title: "Page Name",
+					fieldName: "pageName",
+					value: props.pageName,
+					disabled: false,
+				},
+				{
+					title: "Website Path",
+					fieldName: "websitePath",
+					value: props.websitePath,
+					disabled: false,
+				},
+				{
+					title: "Hidden",
+					fieldName: "hidden",
+					value: props.hidden,
+					disabled: false,
+				},
+				{
+					title: "Revision",
+					fieldName: "__v",
+					value: props.__v,
+					history: props.history,
+					disabled: true,
+				},
+			];
+
+			// if the modal is opening load in the fields for it
+			if (!open) {
+				const fields = formFields.map((field, i) => {
+					return (
+						<Field
+							_id={_id}
+							initialMode={"display"}
+							value={field.value}
+							title={field.title}
+							fieldName={field.fieldName}
+							disabled={field.disabled}
+							key={_id + i}
+							saveButtonCallback={modalSaveButtonCallback}
+							editButtonCallback={notImplemented}
+							closeButtonCallback={notImplemented}
+							onChangeCallback={notImplemented}
+							deleteButtonCallback={notImplemented}
+							undoButtonCallback={modalUndoButtonHandler}
+						/>
+					);
+				});
+				setFields(fields);
+			}
+
+			// if the modal is opening load in the sources for it (for the dropdown)
+			if (!open) {
+				const page = await getPage(_id);
+				setSource(page.source);
+
+				// append an extra "add" field
+				setSource([
+					...page.source,
+					{
+						url: "",
+						remote: true,
+						initialMode: "add",
+					},
+				]);
+			}
 		}
-	};
+
+		handleModal();
+	}, [open]);
 
 	return (
 		<>
@@ -144,7 +148,6 @@ export default function Model(props) {
 				key={props.cellID}
 				onClick={() => {
 					setOpen(true);
-					handleModalToggle();
 				}}
 			>
 				Edit
@@ -157,7 +160,6 @@ export default function Model(props) {
 					className="modal-background"
 					onClick={() => {
 						setOpen(false);
-						handleModalToggle();
 					}}
 				></div>
 
@@ -266,9 +268,31 @@ export default function Model(props) {
 												editButtonCallback={
 													notImplemented
 												}
-												deleteButtonCallback={
-													deleteButtonHandler
-												}
+												deleteButtonCallback={async (
+													values,
+													_id,
+													fieldName
+												) => {
+													await sourceDeleteButtonHandler(
+														values,
+														_id,
+														fieldName
+													);
+													const page = await getPage(
+														_id
+													);
+													setSource(page.source);
+
+													// append an extra "add" field
+													setSource([
+														...page.source,
+														{
+															url: "",
+															remote: true,
+															initialMode: "add",
+														},
+													]);
+												}}
 												onChangeCallback={
 													notImplemented
 												}
@@ -287,7 +311,6 @@ export default function Model(props) {
 							onClick={async () => {
 								await deletePageHandler(_id);
 								setOpen(false);
-								handleModalToggle();
 							}}
 						>
 							Delete

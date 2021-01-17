@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 // import styled from "styled-components";
 import { useTable, usePagination } from "react-table";
 import styled from "styled-components";
-import Modal from "./Modal";
+import Modal from "./modal/Modal";
 import SearchBar from "./SearchBar";
 import { Button } from "@material-ui/core";
 import BuildButton from "./BuildButton";
