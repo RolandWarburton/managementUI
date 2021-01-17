@@ -122,22 +122,17 @@ export default function Model(props) {
 		// if the modal is opening load in the sources for it (for the dropdown)
 		if (!open) {
 			const page = await getPage(_id);
-			setSource([...page.source]);
+			setSource(page.source);
 
-			// add one more source to render as the "add field"
-			if (
-				!source.some((pageSource) => pageSource.initialMode === "add")
-			) {
-				setSource([
-					...page.source,
-					{
-						url: "",
-						remote: true,
-						initialMode: "add",
-					},
-				]);
-			}
-			console.log(source);
+			// append an extra "add" field
+			setSource([
+				...page.source,
+				{
+					url: "",
+					remote: true,
+					initialMode: "add",
+				},
+			]);
 		}
 	};
 
@@ -211,6 +206,27 @@ export default function Model(props) {
 															_id,
 															fieldName
 														);
+
+														// set all source dropdown fields initialMode to "display" and append a new field with initialMode "add"
+														setSource([
+															...source.map(
+																(s) => {
+																	return {
+																		url:
+																			s.url,
+																		remote: true,
+																		initialMode:
+																			"display",
+																	};
+																}
+															),
+															{
+																url: "",
+																remote: true,
+																initialMode:
+																	"add",
+															},
+														]);
 													} else {
 														await sourceSaveButtonHandler(
 															values,
