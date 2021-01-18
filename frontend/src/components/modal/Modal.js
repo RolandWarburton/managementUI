@@ -10,6 +10,9 @@ import {
 	sourceDeleteButtonHandler,
 } from "../fieldCallbacks/sourceDropdownCallbacks";
 
+import propTypes from "prop-types";
+import exact from "prop-types-exact";
+
 import {
 	modalSaveButtonCallback,
 	modalUndoButtonHandler,
@@ -36,11 +39,11 @@ const notImplemented = (functionName) => {
 	return "Function not implemented";
 };
 
-export default function Model(props) {
+const Modal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [fields, setFields] = useState([]);
 	const [source, setSource] = useState([]);
-	const { _id } = props.data.original;
+	const { _id } = props;
 
 	async function handleModal() {
 		// a template that defines each field to load in
@@ -172,4 +175,16 @@ export default function Model(props) {
 			{/* End modal wrapper */}
 		</>
 	);
-}
+};
+
+export default Modal;
+
+Modal.propTypes = exact({
+	__v: propTypes.number.isRequired,
+	cellID: propTypes.string.isRequired,
+	hidden: propTypes.bool.isRequired,
+	meta: propTypes.exact({ template: propTypes.string.isRequired }).isRequired,
+	pageName: propTypes.string.isRequired,
+	source: propTypes.array.isRequired,
+	websitePath: propTypes.string.isRequired,
+});

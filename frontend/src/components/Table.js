@@ -176,9 +176,7 @@ export default function Table({
 			<SearchBar
 				formCallback={(queryString, tag) => {
 					if (!tag) {
-						setSearchFilter(
-							`pageName/${queryString || "placeholder"}`
-						);
+						setSearchFilter(`pageName/${queryString || "placeholder"}`);
 					} else {
 						setSearchFilter(`${tag.key}/${tag.value}`);
 					}
@@ -207,39 +205,26 @@ export default function Table({
 									switch (cell.column.Header) {
 										// Return the edit button
 										case "Edit":
+											// const myprops = cell.row.data.original;
 											output = (
 												<td {...cell.getCellProps()}>
 													<Modal
-														data={cell.row}
+														{...cell.row.original}
+														// data={cell.row}
 														// cells ID (1,2,3...)
 														cellID={cell.row.id}
 														// pagename
-														pageName={
-															cell.row.original
-																.pageName
-														}
+														// pageName={cell.row.original.pageName}
 														// websitePath
-														websitePath={
-															cell.row.original
-																.websitePath
-														}
+														// websitePath={cell.row.original.websitePath}
 														// hidden
 														hidden={
-															cell.row.original
-																.hidden
-																? "true"
-																: "false"
+															cell.row.original.hidden ? true : false
 														}
 														// __v
-														__v={
-															cell.row.original
-																.__v
-														}
+														// __v={cell.row.original.__v}
 														// _id
-														_id={
-															cell.row.allCells[1]
-																.value
-														}
+														// _id={cell.row.allCells[1].value}
 													/>
 												</td>
 											);
@@ -253,10 +238,7 @@ export default function Table({
 														// disabled={isSubmitting}
 														// cell props
 														key={cell.row.id}
-														_id={
-															cell.row.original
-																._id
-														}
+														_id={cell.row.original._id}
 													>
 														Build
 													</BuildButton>
@@ -302,10 +284,7 @@ export default function Table({
 						{loading && (
 							// Use our custom loading state to show a loading indicator
 							<td>
-								<progress
-									className="progress is-medium is-dark"
-									max="100"
-								>
+								<progress className="progress is-medium is-dark" max="100">
 									45%
 								</progress>
 							</td>
@@ -362,9 +341,7 @@ export default function Table({
 							type="number"
 							defaultValue={pageIndex + 1}
 							onChange={(e) => {
-								const page = e.target.value
-									? Number(e.target.value) - 1
-									: 0;
+								const page = e.target.value ? Number(e.target.value) - 1 : 0;
 								gotoPage(page);
 							}}
 							style={{ width: "100px" }}
