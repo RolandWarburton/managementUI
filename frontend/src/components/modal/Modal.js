@@ -180,8 +180,9 @@ const Modal = (props) => {
 export default Modal;
 
 Modal.propTypes = exact({
-	__v: propTypes.number.isRequired,
 	cellID: propTypes.string.isRequired,
+	__v: propTypes.number.isRequired,
+	_id: propTypes.string.isRequired,
 	hidden: propTypes.bool.isRequired,
 	meta: propTypes.exact({ template: propTypes.string.isRequired }).isRequired,
 	pageName: propTypes.string.isRequired,
