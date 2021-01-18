@@ -179,9 +179,10 @@ const Modal = (props) => {
 
 export default Modal;
 
+// I think __v acts weird if its 0, not including isRequired seems to fix it
 Modal.propTypes = exact({
 	cellID: propTypes.string.isRequired,
-	__v: propTypes.number.isRequired,
+	__v: propTypes.number,
 	_id: propTypes.string.isRequired,
 	hidden: propTypes.bool.isRequired,
 	meta: propTypes.exact({ template: propTypes.string.isRequired }).isRequired,
