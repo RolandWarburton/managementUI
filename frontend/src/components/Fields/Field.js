@@ -12,6 +12,8 @@ import {
 	faTrashAlt,
 	faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import propTypes from "prop-types";
+import exact from "prop-types-exact";
 
 const Field = (props) => {
 	const {
@@ -219,3 +221,18 @@ const Field = (props) => {
 };
 
 export default Field;
+
+Field.propTypes = exact({
+	_id: propTypes.string.isRequired,
+	initialMode: propTypes.oneOf(["add", "display", "edit"]).isRequired,
+	value: propTypes.string.isRequired,
+	title: propTypes.string.isRequired,
+	fieldName: propTypes.string.isRequired,
+	disabled: propTypes.bool.isRequired,
+	saveButtonCallback: propTypes.func.isRequired,
+	closeButtonCallback: propTypes.func.isRequired,
+	undoButtonCallback: propTypes.func.isRequired,
+	editButtonCallback: propTypes.func.isRequired,
+	deleteButtonCallback: propTypes.func.isRequired,
+	onChangeCallback: propTypes.func.isRequired,
+});

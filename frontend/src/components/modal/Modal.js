@@ -89,7 +89,7 @@ const Modal = (props) => {
 					<Field
 						_id={_id}
 						initialMode={"display"}
-						value={field.value}
+						value={field.value.toString()}
 						title={field.title}
 						fieldName={field.fieldName}
 						disabled={field.disabled}
