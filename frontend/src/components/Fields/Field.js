@@ -80,13 +80,11 @@ const Field = (props) => {
 
 									// check if the response was an error
 									if (newCurrentValue instanceof Error) {
-										const errorMessage =
-											newCurrentValue.message;
+										const errorMessage = newCurrentValue.message;
 
 										// alert the error message in the field
 										setCurrentValue(
-											`Error: ${errorMessage}` ||
-												"Something went wrong"
+											`Error: ${errorMessage}` || "Something went wrong"
 										);
 
 										// timeout for 1.5s
@@ -100,10 +98,7 @@ const Field = (props) => {
 									}
 								}}
 							>
-								<FontAwesomeIcon
-									className="has-text-right icon"
-									icon={faSave}
-								/>
+								<FontAwesomeIcon className="has-text-right icon" icon={faSave} />
 							</Button>
 						)}
 
@@ -117,11 +112,7 @@ const Field = (props) => {
 									// 3. trigger the saveCallback function prop which passes this state back to <Modal> to handle
 									setMode("display");
 									setNewValue(currentValue);
-									closeButtonCallback(
-										stateRef.current,
-										_id,
-										fieldName
-									);
+									closeButtonCallback(stateRef.current, _id, fieldName);
 								}}
 							>
 								<FontAwesomeIcon
@@ -157,19 +148,12 @@ const Field = (props) => {
 									// 1. trigger the undoButtonCallback which passes this state back to <Modal> to handle
 									// 2. set the current value of the button the the first value
 									// 3. set the new value of the button to the first value
-									await undoButtonCallback(
-										stateRef.current,
-										_id,
-										fieldName
-									);
+									await undoButtonCallback(stateRef.current, _id, fieldName);
 									setCurrentValue(firstValue);
 									setNewValue(firstValue);
 								}}
 							>
-								<FontAwesomeIcon
-									className="has-text-right icon"
-									icon={faUndo}
-								/>
+								<FontAwesomeIcon className="has-text-right icon" icon={faUndo} />
 							</Button>
 						)}
 
@@ -186,25 +170,37 @@ const Field = (props) => {
 									editButtonCallback(stateRef.current, _id);
 								}}
 							>
-								<FontAwesomeIcon
-									className="has-text-right icon"
-									icon={faEdit}
-								/>
+								<FontAwesomeIcon className="has-text-right icon" icon={faEdit} />
 							</Button>
 						)}
 
 						{/* delete button */}
 						{!disabled && (
 							<Button
-								callback={() => {
+								callback={async () => {
 									// when we delete
 									// 1. trigger the deleteCallback
 									console.log("delete");
-									deleteButtonCallback(
+									const result = await deleteButtonCallback(
 										stateRef.current,
 										_id,
 										fieldName
 									);
+
+									if (result instanceof Error) {
+										const errorMessage = result.message;
+
+										// alert the error message in the field
+										setCurrentValue(
+											`Error: ${errorMessage}` || "Something went wrong"
+										);
+
+										// timeout for 1.5s
+										await timeout(1500);
+
+										// set the value back to what it was before (because it failed to update)
+										setCurrentValue(currentValue);
+									}
 								}}
 							>
 								<FontAwesomeIcon

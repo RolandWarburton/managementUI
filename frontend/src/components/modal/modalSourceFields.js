@@ -43,7 +43,6 @@ const SourceFields = (props) => {
 	async function handleModal() {
 		// if the modal is opening load in the sources for it (for the dropdown)
 		if (open) {
-			setSource([]);
 			const page = await getPage(_id);
 			setSource(page.source);
 
@@ -71,94 +70,42 @@ const SourceFields = (props) => {
 						return (
 							<Field
 								_id={_id}
-								initialMode={
-									pageSource.initialMode || "display"
-								}
+								initialMode={pageSource.initialMode || "display"}
 								value={pageSource.url}
 								title="title"
 								fieldName={"source"}
 								disabled={false}
 								key={`${_id}_${index}`}
-								saveButtonCallback={async (
-									values,
-									_id,
-									fieldName
-								) => {
-									if (pageSource.initialMode == "add") {
-										await sourceAddButtonHandler(
-											values,
-											_id,
-											fieldName
-										);
-
-										// set all source dropdown fields initialMode to "display" and append a new field with initialMode "add"
-										setSource([
-											...source.map((s) => {
-												return {
-													url: s.url,
-													remote: true,
-													initialMode: "display",
-												};
-											}),
-											{
-												url: "",
-												remote: true,
-												initialMode: "add",
-											},
-										]);
-									} else {
-										await sourceSaveButtonHandler(
-											values,
-											_id,
-											fieldName
-										);
+								saveButtonCallback={async (values, _id, fieldName) => {
+									try {
+										if (pageSource.initialMode == "add") {
+											await sourceAddButtonHandler(values, _id, fieldName);
+										} else {
+											await sourceSaveButtonHandler(values, _id, fieldName);
+										}
+									} catch (err) {
+										// if the response is not 200 then an error will be returned from these handlers
+										return err;
 									}
 
-									console.log(source);
+									// then refresh the modal
+									handleModal();
 
-									if (
-										!source.some(
-											(pageSource) =>
-												pageSource.initialMode === "add"
-										)
-									) {
-										setSource([
-											...source,
-											{
-												url: "",
-												remote: true,
-												initialMode: "add",
-											},
-										]);
-									}
-
+									// and return the new value because no errors were thrown
 									return values.newValue;
 								}}
 								closeButtonCallback={notImplemented}
 								undoButtonCallback={sourceUndoButtonHandler}
 								editButtonCallback={notImplemented}
-								deleteButtonCallback={async (
-									values,
-									_id,
-									fieldName
-								) => {
-									await sourceDeleteButtonHandler(
-										values,
-										_id,
-										fieldName
-									);
-									const page = await getPage(_id);
-									setSource(page.source);
+								deleteButtonCallback={async (values, _id, fieldName) => {
+									try {
+										await sourceDeleteButtonHandler(values, _id, fieldName);
+									} catch (err) {
+										return err;
+									}
 
-									// append an extra "add" field
-									setSource([
-										...page.source,
-										{
-											url: "",
-											remote: true,
-											initialMode: "add",
-										},
-									]);
+									// then refresh the modal
+									handleModal();
 								}}
 								onChangeCallback={notImplemented}
 							/>

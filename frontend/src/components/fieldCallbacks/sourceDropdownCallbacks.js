@@ -78,8 +78,7 @@ const sourceUndoButtonHandler = async (values, _id, name) => {
 	try {
 		const response = await fetch(url, options);
 
-		if (response.status !== 200)
-			throw new Error("Response status was not 200");
+		if (response.status !== 200) throw new Error("Response status was not 200");
 		return currentValue;
 	} catch (err) {
 		return newValue;
@@ -99,8 +98,7 @@ const sourceDeleteButtonHandler = async (values, _id, name) => {
 	};
 
 	// https://muffinman.io/blog/json-stringify-removes-undefined/
-	const replacer = (key, value) =>
-		typeof value === "undefined" ? null : value;
+	const replacer = (key, value) => (typeof value === "undefined" ? null : value);
 
 	// mongo style update
 	const update = {
@@ -127,9 +125,9 @@ const sourceDeleteButtonHandler = async (values, _id, name) => {
 	// do the request
 	try {
 		const response = await fetch(url, options);
-		if (response.status !== 200)
+		if (response.status !== 200) {
 			throw new Error("Response status was not 200");
-		console.log("deleted done");
+		}
 		return true;
 	} catch (err) {
 		return false;
