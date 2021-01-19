@@ -42,19 +42,23 @@ const SourceFields = (props) => {
 
 	async function handleModal() {
 		// if the modal is opening load in the sources for it (for the dropdown)
-		if (open) {
+		try {
 			const page = await getPage(_id);
-			setSource(page.source);
+			if (open && page) {
+				setSource(page.source);
 
-			// append an extra "add" field
-			setSource([
-				...page.source,
-				{
-					url: "",
-					remote: true,
-					initialMode: "add",
-				},
-			]);
+				// append an extra "add" field
+				setSource([
+					...page.source,
+					{
+						url: "",
+						remote: true,
+						initialMode: "add",
+					},
+				]);
+			}
+		} catch (err) {
+			setSource([]);
 		}
 	}
 
