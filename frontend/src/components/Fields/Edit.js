@@ -1,33 +1,11 @@
 import React, { Children } from "react";
-import {
-	DisplayContainer,
-	EditContainer,
-	BaseStyle,
-	Container,
-} from "./pageEditfield.style";
+import { Container } from "./Field.style";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import {
-	faEdit,
-	faSave,
-	faTimesCircle,
-	faUndo,
-	faTrashAlt,
-	faPlusCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import propTypes from "prop-types";
+import exact from "prop-types-exact";
 
 function Edit(props) {
-	const {
-		currentValue,
-		disabled,
-		saveButton,
-		cancelButton,
-		saveButtonCallback,
-		closeButtonCallback,
-		onChangeCallback,
-		children,
-	} = props;
+	const { currentValue, disabled, onChangeCallback, children } = props;
 
 	return (
 		<Container id={props.value} color={props.color} columns={"1fr auto"}>
@@ -49,3 +27,10 @@ function Edit(props) {
 }
 
 export default Edit;
+
+Edit.propTypes = exact({
+	currentValue: propTypes.string.isRequired,
+	disabled: propTypes.bool.isRequired,
+	onChangeCallback: propTypes.func.isRequired,
+	children: propTypes.arrayOf(propTypes.node),
+});

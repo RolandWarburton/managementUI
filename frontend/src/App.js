@@ -3,8 +3,12 @@ import Pages from "./components/Pages";
 import UploadForm from "./components/uploadForm/UploadForm";
 import styled from "styled-components";
 import { BrowserRouter, Route } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme, ThemeProvider, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import NavBar from "./components/navigation/navBar";
+import { Button, Container, Paper, Grid, AppBar } from "@material-ui/core";
+import { compose, spacing, palette, breakpoints } from "@material-ui/system";
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import { purple } from "@material-ui/core/colors";
 
@@ -13,23 +17,6 @@ const Styles = styled.div`
 	font-size: calc(10px + 1.5vmin);
 	// padding: 0 10%;
 `;
-
-// const theme = createMuiTheme({
-// 	typography: {
-// 		fontFamily: [
-// 			"-apple-system",
-// 			"BlinkMacSystemFont",
-// 			'"Segoe UI"',
-// 			"Roboto",
-// 			'"Helvetica Neue"',
-// 			"Arial",
-// 			"sans-serif",
-// 			'"Apple Color Emoji"',
-// 			'"Segoe UI Emoji"',
-// 			'"Segoe UI Symbol"',
-// 		].join(","),
-// 	},
-// });
 
 const theme = createMuiTheme({
 	typography: {
@@ -50,58 +37,33 @@ const theme = createMuiTheme({
 	},
 });
 
-// palette: {
-// 	// type: "dark",
-// 	// primary: {
-// 	// 	light: "#dedede",
-// 	// 	main: "#363636",
-// 	// 	dark: "#121212",
-// 	// },
-// 	// secondary: {
-// 	// 	light: "f6a5c0",
-// 	// 	main: "#f48fb1",
-// 	// 	dark: "aa647b",
-// 	// },
-// 	// error: {
-// 	// 	light: "#e57373",
-// 	// 	main: "#f44336",
-// 	// 	dark: "#d32f2f",
-// 	// },
-// 	// warning: {
-// 	// 	light: "#ffb74d",
-// 	// 	main: "#ff9800",
-// 	// 	dark: "#f57c00",
-// 	// },
-// 	// info: {
-// 	// 	light: "#64b5f6",
-// 	// 	main: "#2196f3",
-// 	// 	dark: "#1976d2",
-// 	// },
-// 	// success: {
-// 	// 	light: "#81c784",
-// 	// 	main: "#4caf50",
-// 	// 	dark: "#388e3c",
-// 	// },
-// },
-
-// const routes = (
-// 	<Route>
-// 		<Route path="*" handler={Pages} />
-// 	</Route>
-// );
+// breakpoints are
+const paperStyles = makeStyles({
+	root: {
+		display: "flex",
+		marginTop: "3em",
+		margin: "auto",
+		[theme.breakpoints.up("md")]: {
+			maxWidth: "80vw",
+		},
+		[theme.breakpoints.up("lg")]: {
+			maxWidth: "50vw",
+		},
+	},
+});
 
 function App() {
-	// <CssBaseline />;
+	const classes = paperStyles();
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Styles>
 				<BrowserRouter basename="/admin">
-					{/* <div> */}
-					{/* <hr /> */}
-					<Route exact path="/" component={Pages} />
-					<Route exact path="/upload" component={UploadForm} />
-					{/* </div> */}
+					<NavBar position="fixed" />
+					<Paper className={classes.root}>
+						<Route exact path="/" component={Pages} />
+						<Route exact path="/upload" component={UploadForm} />
+					</Paper>
 				</BrowserRouter>
 			</Styles>
 		</ThemeProvider>

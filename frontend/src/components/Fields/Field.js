@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Edit from "./Edit";
 import Display from "./Display";
-import Add from "./Add";
 import Button from "./fieldButtons/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -129,19 +128,7 @@ const Field = (props) => {
 			case "display":
 			default:
 				return (
-					<Display
-						showTitle={true}
-						color="#323232"
-						title={title}
-						currentValue={currentValue}
-						onChangeCallback={(fieldString) => {
-							// when the field changes:
-							// 1. update the fields newValue state
-							// 2. trigger onChangeCallback function prop which passes this state back to <Modal> to handle
-							setNewValue(fieldString);
-							onChangeCallback(stateRef.current, _id);
-						}}
-					>
+					<Display currentValue={currentValue}>
 						{/* undo button */}
 						{currentValue !== firstValue && (
 							<Button

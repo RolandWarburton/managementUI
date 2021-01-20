@@ -29,14 +29,8 @@ const ErrorMessage = ({ name }) => (
 	/>
 );
 
-const submitHandler = async ({
-	pageName,
-	websitePath,
-	hidden,
-	source,
-	meta,
-}) => {
-	const postURL = `http://blog_gateway/api/v1/watch/upload`;
+const submitHandler = async ({ pageName, websitePath, hidden, source, meta }) => {
+	const postURL = `/api/v1/watch/upload`;
 
 	// theres no support for electing a page as "not remote" right now
 	// this is just a hack to make it play nice by adding the {remote: true} field to each page source
@@ -44,12 +38,14 @@ const submitHandler = async ({
 		if (s) s.remote = true;
 	}
 
+	const body = { pageName, websitePath, hidden, source, meta };
+
 	const options = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ pageName, websitePath, hidden, source, meta }),
+		body: JSON.stringify(body),
 	};
 
 	return await fetch(postURL, options).then((res) => {
@@ -141,22 +137,11 @@ const SignupForm = () => {
 
 									{/* template dropdown */}
 									<Fieldset>
-										<MySelect
-											label="Template"
-											name="meta.template"
-										>
-											<option value="">
-												Select a template
-											</option>
-											<option value="blogPost.ejs">
-												blogPost.ejs
-											</option>
-											<option value="menu.ejs">
-												menu.ejs
-											</option>
-											<option value="homePage.ejs">
-												homePage.ejs
-											</option>
+										<MySelect label="Template" name="meta.template">
+											<option value="">Select a template</option>
+											<option value="blogPost.ejs">blogPost.ejs</option>
+											<option value="menu.ejs">menu.ejs</option>
+											<option value="homePage.ejs">homePage.ejs</option>
 										</MySelect>
 									</Fieldset>
 
@@ -181,17 +166,9 @@ const SignupForm = () => {
 											<code>
 												{submitCount === 0
 													? // print the payload
-													  JSON.stringify(
-															values,
-															"\n",
-															4
-													  )
+													  JSON.stringify(values, "\n", 4)
 													: // print the server response
-													  JSON.stringify(
-															submitResult,
-															null,
-															4
-													  )}
+													  JSON.stringify(submitResult, null, 4)}
 											</code>
 										</pre>
 									</Paper>

@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 import Dropdown from "../dropdowns/Dropdown";
 import { Button } from "@material-ui/core";
 import "../../styles/styles.scss";
-import Edit from "../Fields/Edit";
-import {
-	sourceSaveButtonHandler,
-	sourceUndoButtonHandler,
-	sourceAddButtonHandler,
-	sourceDeleteButtonHandler,
-} from "../fieldCallbacks/sourceDropdownCallbacks";
 
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
@@ -18,7 +11,6 @@ import {
 	modalUndoButtonHandler,
 } from "../fieldCallbacks/modalFieldCallbacks";
 
-import PageEditField from "../pageEditField/PageEditField";
 import Field from "../Fields/Field";
 import SourceFields from "./modalSourceFields";
 // callback to update the main fields

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../dropdowns/Dropdown";
-import { Button, Modal } from "@material-ui/core";
 import "../../styles/styles.scss";
-import Edit from "../Fields/Edit";
-import ModalWrapper from "./ModalWrapper";
 import {
 	sourceSaveButtonHandler,
 	sourceUndoButtonHandler,
@@ -11,12 +7,9 @@ import {
 	sourceDeleteButtonHandler,
 } from "../fieldCallbacks/sourceDropdownCallbacks";
 
-import {
-	modalSaveButtonCallback,
-	modalUndoButtonHandler,
-} from "../fieldCallbacks/modalFieldCallbacks";
+import propTypes from "prop-types";
+import exact from "prop-types-exact";
 
-import PageEditField from "../pageEditField/PageEditField";
 import Field from "../Fields/Field";
 
 const notImplemented = (functionName) => {
@@ -121,3 +114,8 @@ const SourceFields = (props) => {
 };
 
 export default SourceFields;
+
+SourceFields.propTypes = exact({
+	open: propTypes.bool,
+	_id: propTypes.string,
+});
