@@ -107,15 +107,18 @@ const Modal = (props) => {
 	return (
 		<>
 			{/* open the modal button */}
-			<button
-				className="button is-dark"
+			<Button
+				variant="contained"
+				type="submit"
+				color="primary"
+				disabled={false}
 				key={props.cellID}
 				onClick={() => {
 					setOpen(true);
 				}}
 			>
 				Edit
-			</button>
+			</Button>
 
 			{/* Modal wrapper */}
 			<div className={`modal ${open ? "is-active" : ""} `}>
