@@ -37,33 +37,17 @@ const theme = createMuiTheme({
 	},
 });
 
-// breakpoints are
-const paperStyles = makeStyles({
-	root: {
-		display: "flex",
-		marginTop: "3em",
-		margin: "auto",
-		[theme.breakpoints.up("md")]: {
-			maxWidth: "80vw",
-		},
-		[theme.breakpoints.up("lg")]: {
-			maxWidth: "50vw",
-		},
-	},
-});
-
 function App() {
-	const classes = paperStyles();
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Styles>
 				<BrowserRouter basename="/admin">
 					<NavBar position="fixed" />
-					<Paper className={classes.root}>
+					<div className={"wrapper"}>
 						<Route exact path="/" component={Pages} />
 						<Route exact path="/upload" component={UploadForm} />
-					</Paper>
+					</div>
 				</BrowserRouter>
 			</Styles>
 		</ThemeProvider>
