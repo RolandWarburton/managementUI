@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../../dropdowns/Dropdown";
 import { Button } from "@material-ui/core";
-// import "../../../styles/styles.scss";
+import ModalContent from "./ModalContent";
 
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
@@ -14,6 +14,14 @@ import {
 import Field from "../../Fields/Field";
 import SourceFields from "./modalSourceFields";
 // callback to update the main fields
+
+import PropTypes from "prop-types";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 
 const deletePageHandler = async (_id) => {
 	const postURL = `/api/v1/watch/delete/${_id}`;
@@ -31,143 +39,70 @@ const notImplemented = (functionName) => {
 	return "Function not implemented";
 };
 
+const CloseButton = ({ handleClose }) => {
+	return (
+		<DialogActions>
+			<Button onClick={handleClose} color="primary" autoFocus>
+				Close
+			</Button>
+		</DialogActions>
+	);
+};
+
+const OpenButton = ({ handleOpen }) => {
+	return (
+		<Button
+			variant="contained"
+			type="submit"
+			color="primary"
+			disabled={false}
+			onClick={() => {
+				handleOpen();
+			}}
+		>
+			Edit
+		</Button>
+	);
+};
+
 const Modal = (props) => {
+	const { fullScreen } = props;
 	const [open, setOpen] = useState(false);
-	const [fields, setFields] = useState([]);
-	const [source, setSource] = useState([]);
-	const { _id } = props;
 
-	async function handleModal() {
-		// a template that defines each field to load in
-		const formFields = [
-			{
-				title: "ID",
-				fieldName: "_id",
-				value: props._id,
-				disabled: true,
-			},
-			{
-				title: "Page Name",
-				fieldName: "pageName",
-				value: props.pageName,
-				disabled: false,
-			},
-			{
-				title: "Website Path",
-				fieldName: "websitePath",
-				value: props.websitePath,
-				disabled: false,
-			},
-			{
-				title: "Hidden",
-				fieldName: "hidden",
-				value: props.hidden,
-				disabled: false,
-			},
-			{
-				title: "Revision",
-				fieldName: "__v",
-				value: props.__v,
-				history: props.history,
-				disabled: true,
-			},
-		];
-
-		// if the modal is opening load in the fields for it
-		if (open) {
-			setFields([]);
-			const fields = formFields.map((field, i) => {
-				return (
-					<Field
-						_id={_id}
-						initialMode={"display"}
-						value={field.value.toString()}
-						title={field.title}
-						fieldName={field.fieldName}
-						disabled={field.disabled}
-						key={_id + i}
-						saveButtonCallback={modalSaveButtonCallback}
-						editButtonCallback={notImplemented}
-						closeButtonCallback={notImplemented}
-						onChangeCallback={notImplemented}
-						deleteButtonCallback={notImplemented}
-						undoButtonCallback={modalUndoButtonHandler}
-					/>
-				);
-			});
-			setFields(fields);
-		}
+	function handleClickOpen() {
+		setOpen(true);
 	}
 
-	// when the modal is opened refresh the field data
-	useEffect(() => {
-		handleModal();
-	}, [open]);
+	function handleClose() {
+		setOpen(false);
+	}
+
+	const rows = [
+		{ key: "_id", value: props._id, prettyName: "Page ID" },
+		{ key: "pageName", value: props.pageName, prettyName: "Page Name" },
+		{ key: "websitePath", value: props.websitePath, pretty: "Website Path" },
+	];
 
 	return (
 		<>
 			{/* open the modal button */}
-			<Button
-				variant="contained"
-				type="submit"
-				color="primary"
-				disabled={false}
-				key={props.cellID}
-				onClick={() => {
-					setOpen(true);
-				}}
-			>
-				Edit
-			</Button>
+			<OpenButton handleOpen={handleClickOpen} />
 
 			{/* Modal wrapper */}
-			<div className={`modal ${open ? "is-active" : ""} `}>
-				{/* Dim background */}
-				<div
-					className="modal-background"
-					onClick={() => {
-						setOpen(false);
-					}}
-				></div>
-
-				{/* Modal card */}
-				<div className="modal-card">
-					<header className="modal-card-head">
-						<p className="modal-card-title">{props.pageName}</p>
-						{/* top right close */}
-						<button
-							className="delete"
-							aria-label="close"
-							onClick={() => {
-								setOpen(false);
-							}}
-						></button>
-					</header>
-					<section className="modal-card-body">
-						{/* print out every form field for this modal */}
-						{fields.map((f) => f)}
-						<Dropdown title="test">
-							<SourceFields open={open} _id={_id}></SourceFields>
-						</Dropdown>
-					</section>
-					<footer className="modal-card-foot">
-						<Button
-							variant="contained"
-							type="submit"
-							color="primary"
-							disabled={false}
-							onClick={async () => {
-								await deletePageHandler(_id);
-								setOpen(false);
-							}}
-						>
-							Delete
-						</Button>
-					</footer>
-				</div>
-				{/* End modal card */}
-			</div>
-			{/* End modal wrapper */}
+			<Dialog
+				fullScreen={fullScreen}
+				open={open}
+				onClose={handleClose}
+				fullWidth={true}
+				maxWidth={"md"}
+				aria-labelledby="responsive-dialog-title"
+			>
+				<DialogTitle id="responsive-dialog-title">{props.pageName}</DialogTitle>
+				<DialogContent>
+					<ModalContent rows={rows} />
+				</DialogContent>
+				<CloseButton handleClose={handleClose} />
+			</Dialog>
 		</>
 	);
 };
@@ -176,6 +111,7 @@ export default Modal;
 
 // I think __v acts weird if its 0, not including isRequired seems to fix it
 Modal.propTypes = exact({
+	fullScreen: propTypes.bool.isRequired,
 	cellID: propTypes.string.isRequired,
 	__v: propTypes.number,
 	_id: propTypes.string.isRequired,

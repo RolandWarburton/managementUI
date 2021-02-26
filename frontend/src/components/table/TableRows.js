@@ -17,6 +17,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableRowColumn from "@material-ui/core/TableRow";
 
+// used for the fullscreen media query
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+
 const Loading = styled.tr`
 	grid-column: 1 / -1;
 	progress {
@@ -27,13 +31,17 @@ const Loading = styled.tr`
 
 const tableStyles = makeStyles({
 	root: {
-		display: "grid",
-		gridTemplateColumns: "0.5fr 1fr 2fr 10% 10%",
+		// display: "grid",
+		// gridTemplateColumns: "0.5fr 1fr 2fr 10% 10%",
 	},
 });
 
 const Table = (props) => {
 	const classes = tableStyles();
+
+	// when bp small or below fullScreen is true
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 	const { page, loading, prepareRow } = props;
 
 	// Render the UI for your table
@@ -54,6 +62,7 @@ const Table = (props) => {
 									output = (
 										<TableCell {...cell.getCellProps()}>
 											<Modal
+												fullScreen={fullScreen}
 												{...cell.row.original}
 												cellID={cell.row.id} // cells ID (1,2,3...)
 											/>
@@ -66,8 +75,8 @@ const Table = (props) => {
 									output = (
 										<TableCell {...cell.getCellProps()}>
 											<BuildButton
-												// cell props
-												key={cell.row.id}
+												fullScreen={fullScreen}
+												{...cell.row.original}
 												_id={cell.row.original._id}
 											>
 												Build
@@ -80,13 +89,7 @@ const Table = (props) => {
 								case "Index":
 									output = (
 										<TableCell {...cell.getCellProps()}>
-											<span
-												style={{
-													color: "white",
-												}}
-											>
-												{cell.row.index}
-											</span>
+											{cell.row.index}
 										</TableCell>
 									);
 									break;
