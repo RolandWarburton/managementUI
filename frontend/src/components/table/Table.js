@@ -1,15 +1,10 @@
-import React, { useRef } from "react";
-// import styled from "styled-components";
-import { useTable, usePagination } from "react-table";
-import styled from "styled-components";
-import Modal from "./modal/Modal";
+import React from "react";
 import SearchBar from "./SearchBar";
-import { Button } from "@material-ui/core";
-import BuildButton from "./BuildButton";
-import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
+import TableRows from "./TableRows";
 
-// MUI crap
 import { TablePagination, TableFooter } from "@material-ui/core";
+import { useTable, usePagination } from "react-table";
 import MaUTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,15 +20,8 @@ const Loading = styled.tr`
 	}
 `;
 
-const tableStyles = makeStyles({
-	root: {
-		display: "grid",
-		gridTemplateColumns: "0.5fr 1fr 2fr 10% 10%",
-	},
-});
-
-const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }) => {
-	const classes = tableStyles();
+const TableWrapper = (props) => {
+	const { columns, data, fetchData, loading, controlledPageCount, count } = props;
 
 	const {
 		getTableProps,
@@ -62,8 +50,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 
 	const [searchFilter, setSearchFilter] = React.useState("");
 
-	console.log({ controlledPageCount });
-
 	const handleChangePage = (event, newPage) => {
 		gotoPage(newPage);
 	};
@@ -74,7 +60,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 		fetchData({ pageIndex, pageSize, searchFilter });
 	}, [fetchData, pageIndex, pageSize, searchFilter]);
 
-	// Render the UI for your table
 	return (
 		<>
 			<SearchBar
@@ -93,97 +78,22 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 					gotoPage(0);
 				}}
 			/>
+
 			<MaUTable {...getTableProps()}>
 				<TableBody {...getTableBodyProps()}>
-					{page.map((row, i) => {
-						prepareRow(row);
-						return (
-							// style={{ width: "80%" }}
-							<TableRow {...row.getRowProps()} className={classes.root}>
-								{row.cells.map((cell, i) => {
-									// console.log(cell);
-
-									// store the return value
-									let output;
-
-									// figure out if we are displaying buttons or content
-									switch (cell.column.Header) {
-										// Return the edit button
-										case "Edit":
-											output = (
-												<TableCell {...cell.getCellProps()}>
-													<Modal
-														{...cell.row.original}
-														// cells ID (1,2,3...)
-														cellID={cell.row.id}
-													/>
-												</TableCell>
-											);
-											break;
-
-										// Return the rebuild button
-										case "Build":
-											output = (
-												<TableCell {...cell.getCellProps()}>
-													<BuildButton
-														// disabled={isSubmitting}
-														// cell props
-														key={cell.row.id}
-														_id={cell.row.original._id}
-													>
-														Build
-													</BuildButton>
-												</TableCell>
-											);
-											break;
-
-										// the number column
-										case "Index":
-											output = (
-												<TableCell {...cell.getCellProps()}>
-													<span
-														style={{
-															color: "white",
-														}}
-													>
-														{cell.row.index}
-													</span>
-												</TableCell>
-											);
-											break;
-
-										// Return the cells data
-										default:
-											output = (
-												<TableCell {...cell.getCellProps()}>
-													{/* <span
-														style={{
-															color: "white",
-														}}
-													> */}
-													{cell.render("Cell")}
-													{/* </span> */}
-												</TableCell>
-											);
-											break;
-									}
-									return output;
-								})}
-							</TableRow>
-						);
-					})}
+					{/* table guts are rendered here */}
+					<TableRows page={page} loading={loading} prepareRow={prepareRow}></TableRows>
 					<Loading>{loading && <td></td>}</Loading>
 				</TableBody>
+				{/* Table Footer */}
 				<TableFooter>
 					<TableRow>
 						{/* https://material-ui.com/api/table-pagination/#tablepagination-api */}
 						<TablePagination
 							className="pagination"
 							rowsPerPageOptions={[1, 10, 20, 50, { label: "All", value: -1 }]}
-							// The total number of rows.
-							count={count}
-							// The zero-based index of the current page.
-							page={pageIndex}
+							count={count} // The total number of rows.
+							page={pageIndex} // The zero-based index of the current page.
 							rowsPerPage={pageSize}
 							SelectProps={{
 								inputProps: { "aria-label": "rows per page" },
@@ -191,11 +101,8 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 							}}
 							onChangePage={handleChangePage}
 							onChangeRowsPerPage={(e) => {
-								// setRowsPerPage(Number(e.target.value));
-								// console.log(Number(e.target.value));
 								setPageSize(Number(e.target.value));
 							}}
-							// ActionsComponent={TablePaginationActions}
 						></TablePagination>
 					</TableRow>
 				</TableFooter>
@@ -203,4 +110,5 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 		</>
 	);
 };
-export default Table;
+
+export default TableWrapper;

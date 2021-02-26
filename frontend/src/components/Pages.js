@@ -2,7 +2,7 @@ import fetchDataPromise from "./helpers/fetchDataPromise";
 import React, { useMemo, useState, useRef, useEffect } from "react";
 // import { Paper } from "@material-ui/core";
 // import SearchBar from "./SearchBar";
-import TableWrapper from "./table/TableWrapper";
+// import TableWrapper from "./table/Table";
 
 import Table from "./table/Table";
 
@@ -71,22 +71,13 @@ export default function Pages() {
 	}, []);
 
 	return (
-		// <TableWrapper
-		// 	columns={columns}
-		// 	data={data}
-		// 	fetchData={fetchData}
-		// 	loading={loading}
-		// 	controlledPageCount={pageCount}
-		// 	count={count}
-		// >
 		<Table
 			columns={columns}
 			data={data}
 			fetchData={fetchData}
 			loading={loading}
-			controlledPageCount={pageCount} // the number of rows, IE 10, 20, 50 etc...
-			count={count} // the total number of rows within the database, IE 100+
+			controlledPageCount={pageCount}
+			count={count}
 		/>
-		// </TableWrapper>
 	);
 }
