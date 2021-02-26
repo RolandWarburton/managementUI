@@ -58,11 +58,11 @@ const BuildButton = (props) => {
 			// on render show as blue: 666A72
 			// on submitting as gray: 1976D2
 			// on submit as green: green
-			style={{
-				backgroundColor: hasSubmit
-					? "green"
-					: `${!isSubmitting ? "#1976D2" : "#666A72"}`,
-			}}
+			// style={{
+			// 	backgroundColor: hasSubmit
+			// 		? "green"
+			// 		: `${!isSubmitting ? "#1976D2" : "#666A72"}`,
+			// }}
 			// cell props
 			onClick={async () => {
 				// disable the button

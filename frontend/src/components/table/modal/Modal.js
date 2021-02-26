@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../dropdowns/Dropdown";
+import Dropdown from "../../dropdowns/Dropdown";
 import { Button } from "@material-ui/core";
-import "../../styles/styles.scss";
+// import "../../../styles/styles.scss";
 
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
@@ -9,9 +9,9 @@ import exact from "prop-types-exact";
 import {
 	modalSaveButtonCallback,
 	modalUndoButtonHandler,
-} from "../fieldCallbacks/modalFieldCallbacks";
+} from "../../fieldCallbacks/modalFieldCallbacks";
 
-import Field from "../Fields/Field";
+import Field from "../../Fields/Field";
 import SourceFields from "./modalSourceFields";
 // callback to update the main fields
 

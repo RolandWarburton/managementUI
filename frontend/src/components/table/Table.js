@@ -29,13 +29,6 @@ const tableStyles = makeStyles({
 	root: {
 		display: "grid",
 		gridTemplateColumns: "0.5fr 1fr 2fr 10% 10%",
-		// gridTemplateColumns: "50% 50%",
-		// [theme.breakpoints.up("md")]: {
-		// 	maxWidth: "80vw",
-		// },
-		// [theme.breakpoints.up("lg")]: {
-		// 	maxWidth: "50vw",
-		// },
 	},
 });
 
@@ -68,7 +61,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 	);
 
 	const [searchFilter, setSearchFilter] = React.useState("");
-	// const [pageCount, setPageCount] = React.useState("");
 
 	console.log({ controlledPageCount });
 
@@ -84,7 +76,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 
 	// Render the UI for your table
 	return (
-		// <Styles>
 		<>
 			<SearchBar
 				formCallback={(queryString, tag) => {
@@ -102,7 +93,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 					gotoPage(0);
 				}}
 			/>
-			{/* style={{ width: "auto", tableLayout: "auto" }} */}
 			<MaUTable {...getTableProps()}>
 				<TableBody {...getTableBodyProps()}>
 					{page.map((row, i) => {
@@ -182,17 +172,7 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 							</TableRow>
 						);
 					})}
-					<Loading>
-						{loading && (
-							// Use our custom loading state to show a loading indicator
-							// <td>
-							// 	<progress className="progress is-medium is-dark" max="100">
-							// 		45%
-							// 	</progress>
-							// </td>
-							<td></td>
-						)}
-					</Loading>
+					<Loading>{loading && <td></td>}</Loading>
 				</TableBody>
 				<TableFooter>
 					<TableRow>
@@ -221,7 +201,6 @@ const Table = ({ columns, data, fetchData, loading, controlledPageCount, count }
 				</TableFooter>
 			</MaUTable>
 		</>
-		// </Styles>
 	);
 };
 export default Table;

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/styles.scss";
+import "../../../styles/styles.scss";
 import {
 	sourceSaveButtonHandler,
 	sourceUndoButtonHandler,
 	sourceAddButtonHandler,
 	sourceDeleteButtonHandler,
-} from "../fieldCallbacks/sourceDropdownCallbacks";
+} from "../../fieldCallbacks/sourceDropdownCallbacks";
 
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
 
-import Field from "../Fields/Field";
+import Field from "../../Fields/Field";
 
 const notImplemented = (functionName) => {
 	return functionName + " function not implemented";
