@@ -11,6 +11,9 @@ import {
 	faTrashAlt,
 	faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import UndoIcon from "@material-ui/icons/Undo";
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
 
@@ -19,7 +22,6 @@ const Field = (props) => {
 		_id,
 		initialMode,
 		value,
-		title,
 		fieldName,
 		disabled,
 		saveButtonCallback,
@@ -142,7 +144,7 @@ const Field = (props) => {
 									setNewValue(firstValue);
 								}}
 							>
-								<FontAwesomeIcon className="has-text-right icon" icon={faUndo} />
+								<UndoIcon />
 							</Button>
 						)}
 
@@ -159,7 +161,7 @@ const Field = (props) => {
 									editButtonCallback(stateRef.current, _id);
 								}}
 							>
-								<FontAwesomeIcon className="has-text-right icon" icon={faEdit} />
+								<EditIcon />
 							</Button>
 						)}
 
@@ -192,10 +194,7 @@ const Field = (props) => {
 									}
 								}}
 							>
-								<FontAwesomeIcon
-									className="has-text-right icon"
-									icon={faTrashAlt}
-								/>
+								<DeleteIcon />
 							</Button>
 						)}
 					</Display>
@@ -213,7 +212,6 @@ Field.propTypes = exact({
 	_id: propTypes.string.isRequired,
 	initialMode: propTypes.oneOf(["add", "display", "edit"]).isRequired,
 	value: propTypes.string.isRequired,
-	title: propTypes.string.isRequired,
 	fieldName: propTypes.string.isRequired,
 	disabled: propTypes.bool.isRequired,
 	saveButtonCallback: propTypes.func.isRequired,

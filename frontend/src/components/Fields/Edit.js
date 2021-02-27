@@ -1,20 +1,22 @@
 import React, { Children } from "react";
-import { Container } from "./Field.style";
-
+import TableCell from "@material-ui/core/TableCell";
+import tableCellStyles from "./TableCell.theme";
+import TextField from "@material-ui/core/TextField";
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
 
 function Edit(props) {
 	const { currentValue, disabled, onChangeCallback, children } = props;
+	const classes = tableCellStyles();
 
 	return (
-		<Container id={props.value} color={props.color} columns={"1fr auto"}>
+		<TableCell id={props.value} className={classes.root}>
 			{/* Input box */}
-			<input
-				className="is-primary"
+			<TextField
+				id="standard-basic"
+				// label="Standard"
 				defaultValue={currentValue}
-				id="inputField"
-				disabled={disabled}
+				fullWidth={true}
 				onChange={(e) => {
 					onChangeCallback(e.target.value);
 				}}
@@ -22,7 +24,7 @@ function Edit(props) {
 
 			{/* Button group */}
 			<div className="buttons">{children}</div>
-		</Container>
+		</TableCell>
 	);
 }
 

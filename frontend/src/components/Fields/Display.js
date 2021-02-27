@@ -1,18 +1,20 @@
 import React from "react";
-import { Container } from "./Field.style";
+import TableCell from "@material-ui/core/TableCell";
 
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
+import tableCellStyles from "./TableCell.theme";
 
 function Display(props) {
 	const { currentValue, children } = props;
+	const classes = tableCellStyles();
 	return (
-		<Container id={props.value} color={props.color} columns={"1fr auto"}>
+		<TableCell id={props.value} className={classes.root}>
 			<span>{currentValue}</span>
 
 			{/* Button group */}
 			<div className="buttons">{children}</div>
-		</Container>
+		</TableCell>
 	);
 }
 

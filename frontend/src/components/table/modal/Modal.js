@@ -80,7 +80,9 @@ const Modal = (props) => {
 	const rows = [
 		{ key: "_id", value: props._id, prettyName: "Page ID" },
 		{ key: "pageName", value: props.pageName, prettyName: "Page Name" },
-		{ key: "websitePath", value: props.websitePath, pretty: "Website Path" },
+		{ key: "websitePath", value: props.websitePath, prettyName: "Website Path" },
+		{ key: "__v", value: props.__v, prettyName: "Version" },
+		{ key: "meta.template", value: props.meta.template, prettyName: "Template" },
 	];
 
 	return (
@@ -99,7 +101,7 @@ const Modal = (props) => {
 			>
 				<DialogTitle id="responsive-dialog-title">{props.pageName}</DialogTitle>
 				<DialogContent>
-					<ModalContent rows={rows} />
+					<ModalContent rows={rows} _id={props._id} />
 				</DialogContent>
 				<CloseButton handleClose={handleClose} />
 			</Dialog>

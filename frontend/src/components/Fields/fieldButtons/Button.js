@@ -9,14 +9,19 @@ import {
 	faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
-function Button(props) {
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+
+// import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+
+function ButtonGenerator(props) {
 	const { disabled, callback, children } = props;
 
 	return (
-		<button className="button is-text" onClick={callback}>
+		<IconButton size={"small"} aria-label="delete" onClick={callback}>
 			{children}
-		</button>
+		</IconButton>
 	);
 }
 
-export default Button;
+export default ButtonGenerator;

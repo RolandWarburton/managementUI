@@ -2,16 +2,15 @@ import styled from "styled-components";
 
 export const DisplayContainer = styled.div`
 	display: grid;
-	grid-template-columns: ${(props) =>
-		props.noTitle ? "1fr auto" : "30% 1fr auto auto"};
+	grid-template-columns: ${(props) => (props.noTitle ? "1fr auto" : "30% 1fr auto auto")};
 	// padding: 5px;
 	background: ${(props) => (props.color ? props.color : "magenta")};
 `;
 
+// Deprecated this
 export const Container = styled.div`
 	display: grid;
-	grid-template-columns: ${(props) =>
-		props.columns ? props.columns : "1fr auto"};
+	grid-template-columns: ${(props) => (props.columns ? props.columns : "1fr auto")};
 
 	input {
 		width: 100%;
