@@ -29,6 +29,12 @@ const Loading = styled.tr`
 	}
 `;
 
+const ButtonGroup = styled.div`
+	// width: 50%;
+	display: flex;
+	justify-content: space-evenly;
+`;
+
 const tableStyles = makeStyles({
 	root: {
 		// display: "grid",
@@ -57,30 +63,27 @@ const Table = (props) => {
 
 							// figure out if we are displaying buttons or content
 							switch (cell.column.Header) {
-								// ##──── Edit Column ───────────────────────────────────────────────────────────────────────
-								case "Edit":
+								// ##──── Edit and Build Buttons ────────────────────────────────────────────────────────────
+								case "Buttons":
 									output = (
-										<TableCell {...cell.getCellProps()}>
-											<Modal
-												fullScreen={fullScreen}
-												{...cell.row.original}
-												cellID={cell.row.id} // cells ID (1,2,3...)
-											/>
-										</TableCell>
-									);
-									break;
+										<TableCell {...cell.getCellProps()} align={"right"}>
+											<ButtonGroup>
+												{/* Edit Button */}
+												<Modal
+													fullScreen={fullScreen}
+													{...cell.row.original}
+													cellID={cell.row.id} // cells ID (1,2,3...)
+												/>
 
-								// ##──── Rebuild Column ────────────────────────────────────────────────────────────────────
-								case "Build":
-									output = (
-										<TableCell {...cell.getCellProps()}>
-											<BuildButton
-												fullScreen={fullScreen}
-												{...cell.row.original}
-												_id={cell.row.original._id}
-											>
-												Build
-											</BuildButton>
+												{/* Build Button */}
+												<BuildButton
+													fullScreen={fullScreen}
+													{...cell.row.original}
+													_id={cell.row.original._id}
+												>
+													Build
+												</BuildButton>
+											</ButtonGroup>
 										</TableCell>
 									);
 									break;

@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Dropdown from "../../dropdowns/Dropdown";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import Button from "../../Fields/fieldButtons/Button";
+import tableCellStyles from "../../Fields/TableCell.theme";
 import {
 	modalSaveButtonCallback,
 	modalUndoButtonHandler,
@@ -53,12 +54,6 @@ const formatData = (page) => {
 	];
 };
 
-const formatSourceData = (source) => {
-	return source.foreach((s) => {
-		return { url: source.url, initialMode: "display", saveMethod: sourceSaveCallback };
-	});
-};
-
 const notImplemented = () => {
 	console.log("not implemented");
 };
@@ -66,6 +61,22 @@ const notImplemented = () => {
 const ModalContent = (props) => {
 	const [rows, setRows] = React.useState([]);
 	const [source, setSource] = React.useState([]);
+	// const [addRow, setAddRow] = React.useState({
+	// 	url: "",
+	// 	initialMode: "edit",
+	// 	saveMethod: handleSourceAdd,
+	// });
+
+	const formatSourceData = (source) => {
+		return source.map((s) => {
+			return {
+				key: s.url,
+				url: s.url,
+				initialMode: "display",
+				saveMethod: handleSourceSave,
+			};
+		});
+	};
 
 	const handleUpdateRows = async () => {
 		// refresh the page
@@ -76,14 +87,22 @@ const ModalContent = (props) => {
 
 		// set the source data
 		const source = await page.source;
-		setSource(source);
+		setSource(formatSourceData(source));
 	};
 
 	// this wraps the sourceAddCallback to ensure that modal data is refreshed after a field is added
 	// the callback will return the result to <Field /> and then refreshes the entire modals data
 	const handleSourceAdd = async (value, _id, name) => {
 		const result = await sourceAddCallback(value, _id, name);
-		await handleUpdateRows();
+		handleUpdateRows();
+		const tempSource = source;
+		const addFieldIndex = source.findIndex((s) => s.url == value.newValue);
+		if (addFieldIndex != -1) {
+			console.log(`Updating the source`);
+			tempSource[addFieldIndex].url = value.newValue;
+			setSource([...tempSource]);
+		}
+
 		return result;
 	};
 
@@ -91,6 +110,12 @@ const ModalContent = (props) => {
 	// the callback will return the result to <Field /> and then refreshes the entire modals data
 	const handleSourceDelete = async (values, _id, name) => {
 		const result = await sourceDeleteCallback(values, _id, name);
+		await handleUpdateRows();
+		return result;
+	};
+
+	const handleSourceSave = async (values, _id, name) => {
+		const result = await sourceSaveCallback(values, _id, name);
 		await handleUpdateRows();
 		return result;
 	};
@@ -131,37 +156,48 @@ const ModalContent = (props) => {
 				<TableContainer>
 					<Table className={classes.table} aria-label="simple table">
 						<TableBody>
-							{/* <ModalSourceFields source={source} _id={props._id} /> */}
 							{source.map((row) => (
-								<Field
-									_id={props._id}
-									initialMode={row.initialMode || "display"} // new fields come in "edit" mode, otherwise use "display" mode
-									value={row.url.toString()}
-									fieldName={"source.url"} // the key to update in the database. EG. _id or pageName
-									disabled={false}
-									saveButtonCallback={row.saveMethod || sourceSaveCallback} // assume field already exists if the saveMethod is not given
-									closeButtonCallback={notImplemented}
-									undoButtonCallback={sourceUndoCallback}
-									editButtonCallback={notImplemented}
-									deleteButtonCallback={handleSourceDelete}
-									onChangeCallback={notImplemented}
-								/>
+								<TableRow key={row.key || row.url}>
+									<Field
+										_id={props._id}
+										initialMode={row.initialMode || "display"} // new fields come in "edit" mode, otherwise use "display" mode
+										value={row.url.toString()}
+										fieldName={"source.url"} // the key to update in the database. EG. _id or pageName
+										disabled={false}
+										saveButtonCallback={row.saveMethod || handleSourceSave} // assume field already exists if the saveMethod is not given
+										closeButtonCallback={notImplemented}
+										undoButtonCallback={sourceUndoCallback}
+										editButtonCallback={notImplemented}
+										deleteButtonCallback={handleSourceDelete}
+										onChangeCallback={notImplemented}
+									/>
+								</TableRow>
 							))}
-							<Button
-								disabled={false}
-								callback={() => {
-									setSource([
-										...source,
-										{
-											url: "",
-											initialMode: "edit",
-											saveMethod: handleSourceAdd,
-										},
-									]);
-								}}
-							>
-								<AddBoxIcon />
-							</Button>
+							<TableRow key={props._id + "addButton"}>
+								<TableCell id={props.value}>
+									<Button
+										disabled={false}
+										callback={() => {
+											// only add a new field IF there is no empty fields
+											const sourceHasEmptyUrl = source.find((s) => {
+												return s.url == "";
+											});
+											if (!sourceHasEmptyUrl) {
+												setSource([
+													...source,
+													{
+														url: "",
+														initialMode: "edit",
+														saveMethod: handleSourceAdd,
+													},
+												]);
+											}
+										}}
+									>
+										<AddBoxIcon />
+									</Button>
+								</TableCell>
+							</TableRow>
 						</TableBody>
 					</Table>
 				</TableContainer>

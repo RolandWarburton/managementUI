@@ -27,11 +27,7 @@ export default function Pages() {
 				accessor: "pageName",
 			},
 			{
-				Header: "Edit",
-				accessor: "",
-			},
-			{
-				Header: "Build",
+				Header: "Buttons",
 				accessor: "",
 			},
 		],
