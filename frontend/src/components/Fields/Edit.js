@@ -6,8 +6,15 @@ import propTypes from "prop-types";
 import exact from "prop-types-exact";
 
 function Edit(props) {
-	const { currentValue, disabled, onChangeCallback, children } = props;
+	const { currentValue, disabled, onChangeCallback, onSubmitCallback, children } = props;
 	const classes = tableCellStyles();
+
+	const handleKeyDown = (e) => {
+		console.log(e.key);
+		if (e.key === "Enter") {
+			onSubmitCallback(e.target.value);
+		}
+	};
 
 	return (
 		<TableCell id={props.value} className={classes.root}>
@@ -20,6 +27,7 @@ function Edit(props) {
 				onChange={(e) => {
 					onChangeCallback(e.target.value);
 				}}
+				onKeyDown={handleKeyDown}
 			/>
 
 			{/* Button group */}
@@ -30,9 +38,9 @@ function Edit(props) {
 
 export default Edit;
 
-Edit.propTypes = exact({
-	currentValue: propTypes.string.isRequired,
-	disabled: propTypes.bool.isRequired,
-	onChangeCallback: propTypes.func.isRequired,
-	children: propTypes.arrayOf(propTypes.node),
-});
+// Edit.propTypes = exact({
+// 	currentValue: propTypes.string.isRequired,
+// 	disabled: propTypes.bool.isRequired,
+// 	onChangeCallback: propTypes.func.isRequired,
+// 	children: propTypes.arrayOf(propTypes.node),
+// });

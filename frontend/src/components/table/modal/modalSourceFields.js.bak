@@ -61,55 +61,58 @@ const SourceFields = (props) => {
 	}, [open]);
 
 	return (
-		<>
-			{open && source.length > 0
-				? source.map((pageSource, index) => {
-						return (
-							<Field
-								_id={_id}
-								initialMode={pageSource.initialMode || "display"}
-								value={pageSource.url}
-								title="title"
-								fieldName={"source"}
-								disabled={false}
-								key={`${_id}_${index}`}
-								saveButtonCallback={async (values, _id, fieldName) => {
-									try {
-										if (pageSource.initialMode == "add") {
-											await sourceAddButtonHandler(values, _id, fieldName);
-										} else {
-											await sourceSaveButtonHandler(values, _id, fieldName);
-										}
-									} catch (err) {
-										// if the response is not 200 then an error will be returned from these handlers
-										return err;
-									}
-
-									// then refresh the modal
-									handleModal();
-
-									// and return the new value because no errors were thrown
-									return values.newValue;
-								}}
-								closeButtonCallback={notImplemented}
-								undoButtonCallback={sourceUndoButtonHandler}
-								editButtonCallback={notImplemented}
-								deleteButtonCallback={async (values, _id, fieldName) => {
-									try {
-										await sourceDeleteButtonHandler(values, _id, fieldName);
-									} catch (err) {
-										return err;
-									}
-
-									// then refresh the modal
-									handleModal();
-								}}
-								onChangeCallback={notImplemented}
-							/>
-						);
-				  })
-				: "loading"}
-		</>
+		// <>
+			// {/* {open && source.length > 0 */}
+			// {/* ? source.map((pageSource, index) => { */}
+			// {/* return ( */}
+				{source.map(pageSource, index) => {
+					return (<Field
+						_id={_id}
+						initialMode={pageSource.initialMode || "display"}
+						value={pageSource.url}
+						title="title"
+						fieldName={"source"}
+						disabled={false}
+						key={`${_id}_${index}`}
+						saveButtonCallback={async (values, _id, fieldName) => {
+							try {
+								if (pageSource.initialMode == "add") {
+									await sourceAddButtonHandler(values, _id, fieldName);
+								} else {
+									await sourceSaveButtonHandler(values, _id, fieldName);
+								}
+							} catch (err) {
+								// if the response is not 200 then an error will be returned from these handlers
+								return err;
+							}
+		
+							// then refresh the modal
+							handleModal();
+		
+							// and return the new value because no errors were thrown
+							return values.newValue;
+						}}
+						closeButtonCallback={notImplemented}
+						undoButtonCallback={sourceUndoButtonHandler}
+						editButtonCallback={notImplemented}
+						deleteButtonCallback={async (values, _id, fieldName) => {
+							try {
+								await sourceDeleteButtonHandler(values, _id, fieldName);
+							} catch (err) {
+								return err;
+							}
+		
+							// then refresh the modal
+							handleModal();
+						}}
+						onChangeCallback={notImplemented}
+					/>)
+				}}
+			
+			// {/* ); */}
+			// {/* }) */}
+			// {/* : "loading"} */}
+		// </>
 	);
 };
 

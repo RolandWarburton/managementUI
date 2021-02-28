@@ -17,37 +17,8 @@ function DropdownButton(collapsed) {
 	);
 }
 
-/**
- *
- * @param {*} props
- * @param {*} title
- * @param {*} thingToRender
- * @param {*} dataToRenderThingWith
- */
-function Dropdown({ children }) {
+function Dropdown({ children, title, loading }) {
 	const [collapsed, setCollapsed] = useState(true);
-	// const [title, setTitle] = useState(`Open ${props.title}`);
-	const [title, setTitle] = useState(`Open temp`);
-	const [loading, setLoading] = useState(false);
-
-	// const handleCollapser = (event) => {
-	// 	event.preventDefault();
-	// 	setCollapsed(!collapsed);
-
-	// };
-
-	React.useEffect(() => {
-		// const content = event.target.closest("div").querySelector(".content");
-		// if (collapsed) {
-		// 	content.className = "content collapsed";
-		// 	setTitle(`Open ${props.name}`);
-		// } else {
-		// 	content.className = "content";
-		// 	setTitle(`Close ${props.name}`);
-		// 	loadHistoryData();
-		// }
-		// console.table(collapsed);
-	}, [collapsed]);
 
 	return (
 		<Collapsible>
@@ -58,7 +29,8 @@ function Dropdown({ children }) {
 					setCollapsed(!collapsed);
 				}}
 			>
-				{title} <DropdownButton collapsed={collapsed} />
+				{collapsed ? `Open ${title}` : `Close ${title}`}
+				<DropdownButton collapsed={collapsed} />
 			</a>
 
 			<div className={collapsed ? "content collapsed" : "content"}>

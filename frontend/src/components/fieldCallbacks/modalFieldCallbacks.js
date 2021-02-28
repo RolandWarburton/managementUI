@@ -1,6 +1,9 @@
 const modalSaveButtonCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
+	if (!firstValue && !currentValue && !newValue) {
+		throw new Error("An error occurred while saving");
+	}
 
 	const filter = { _id: _id };
 
@@ -66,8 +69,7 @@ const modalUndoButtonHandler = async (values, _id, name) => {
 	try {
 		const response = await fetch(url, options);
 
-		if (response.status !== 200)
-			throw new Error("Response status was not 200");
+		if (response.status !== 200) throw new Error("Response status was not 200");
 		return currentValue;
 	} catch (err) {
 		return newValue;

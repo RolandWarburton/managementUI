@@ -49,6 +49,33 @@ const Field = (props) => {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
+	const saveButtonCallbackHandler = async () => {
+		// this will be the save button
+		// when we save:
+		// 1. swap back to display mode so this switch renders the <Display> field instead
+		// 2. trigger the saveCallback function prop which passes this state back to <Modal> to handle
+		// 3. set the response from the callback to the new field value. else catch and print the error
+		setMode("display");
+		const newCurrentValue = await saveButtonCallback(stateRef.current, _id, fieldName);
+
+		// check if the response was an error
+		if (newCurrentValue instanceof Error) {
+			const errorMessage = newCurrentValue.message;
+
+			// alert the error message in the field
+			setCurrentValue(`Error: ${errorMessage}` || "Something went wrong");
+
+			// timeout for 1.5s
+			await timeout(1500);
+
+			// set the value back to what it was before (because it failed to update)
+			setCurrentValue(currentValue);
+		} else {
+			// we had no trouble updating, so update the value client side
+			setCurrentValue(newCurrentValue);
+		}
+	};
+
 	const renderField = (mode) => {
 		switch (mode) {
 			case "edit":
@@ -57,6 +84,7 @@ const Field = (props) => {
 					<Edit
 						currentValue={currentValue}
 						disabled={false}
+						onSubmitCallback={saveButtonCallbackHandler}
 						onChangeCallback={(fieldString) => {
 							// when the field changes:
 							// 1. update the fields newValue state
@@ -67,40 +95,7 @@ const Field = (props) => {
 					>
 						{/* save button */}
 						{!disabled && (
-							<Button
-								callback={async () => {
-									// this will be the save button
-									// when we save:
-									// 1. swap back to display mode so this switch renders the <Display> field instead
-									// 2. trigger the saveCallback function prop which passes this state back to <Modal> to handle
-									// 3. set the response from the callback to the new field value. else catch and print the error
-									setMode("display");
-									const newCurrentValue = await saveButtonCallback(
-										stateRef.current,
-										_id,
-										fieldName
-									);
-
-									// check if the response was an error
-									if (newCurrentValue instanceof Error) {
-										const errorMessage = newCurrentValue.message;
-
-										// alert the error message in the field
-										setCurrentValue(
-											`Error: ${errorMessage}` || "Something went wrong"
-										);
-
-										// timeout for 1.5s
-										await timeout(1500);
-
-										// set the value back to what it was before (because it failed to update)
-										setCurrentValue(currentValue);
-									} else {
-										// we had no trouble updating, so update the value client side
-										setCurrentValue(newCurrentValue);
-									}
-								}}
-							>
+							<Button callback={saveButtonCallbackHandler}>
 								<FontAwesomeIcon className="has-text-right icon" icon={faSave} />
 							</Button>
 						)}
@@ -112,7 +107,7 @@ const Field = (props) => {
 									// when we close:
 									// 1. swap back to display mode so this switch renders the <Display> field instead
 									// 2. Set our field value back to the current one
-									// 3. trigger the saveCallback function prop which passes this state back to <Modal> to handle
+									// 3. trigger the CloseButtonCallback function prop which passes this state back to <Modal> to handle
 									setMode("display");
 									setNewValue(currentValue);
 									closeButtonCallback(stateRef.current, _id, fieldName);

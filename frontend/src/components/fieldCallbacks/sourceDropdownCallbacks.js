@@ -1,4 +1,4 @@
-const sourceSaveButtonHandler = async (values, _id, name) => {
+const sourceSaveCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
 
@@ -42,7 +42,7 @@ const sourceSaveButtonHandler = async (values, _id, name) => {
 	}
 };
 
-const sourceUndoButtonHandler = async (values, _id, name) => {
+const sourceUndoCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
 
@@ -85,7 +85,7 @@ const sourceUndoButtonHandler = async (values, _id, name) => {
 	}
 };
 
-const sourceDeleteButtonHandler = async (values, _id, name) => {
+const sourceDeleteCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
 
@@ -134,7 +134,7 @@ const sourceDeleteButtonHandler = async (values, _id, name) => {
 	}
 };
 
-const sourceAddButtonHandler = async (values, _id, name) => {
+const sourceAddCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
 
@@ -167,9 +167,4 @@ const sourceAddButtonHandler = async (values, _id, name) => {
 	}
 };
 
-export {
-	sourceSaveButtonHandler,
-	sourceUndoButtonHandler,
-	sourceAddButtonHandler,
-	sourceDeleteButtonHandler,
-};
+export { sourceSaveCallback, sourceUndoCallback, sourceAddCallback, sourceDeleteCallback };
