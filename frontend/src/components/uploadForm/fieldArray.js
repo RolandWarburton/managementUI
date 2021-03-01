@@ -1,27 +1,9 @@
 import React, { useState, useEffect, getIn } from "react";
-import {
-	useFormikContext,
-	FieldArray,
-	Field,
-	FastField,
-	useField,
-} from "formik";
+import { useFormikContext, FieldArray, Field, FastField, useField } from "formik";
 import { Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { SourceRow } from "./UploadForm.styles";
 import { sourceRowStyles } from "./MUIStyles";
-import MyCheckbox from "./Checkbox";
-
-const ErrorMessage = ({ name }) => (
-	<Field
-		name={name}
-		render={({ form }) => {
-			const error = getIn(form.errors, name);
-			const touch = getIn(form.touched, name);
-			return touch && error ? error : null;
-		}}
-	/>
-);
 
 function SourcesSection() {
 	// ? include handleSubmit if you want to submit from this component instead of including it in the overall form
@@ -29,14 +11,8 @@ function SourcesSection() {
 	const { values, errors } = useFormikContext(); // formikProps
 	const classes = sourceRowStyles();
 
-	const [checkedSources, setCheckedSources] = useState([]);
-
 	useEffect(() => {
 		console.log("updated");
-		// setCheckedSources()
-		return () => {
-			// cleanup
-		};
 	}, [values.source]);
 
 	return (
@@ -76,9 +52,7 @@ function SourcesSection() {
 									color="primary"
 									// ? formik props
 									type="button"
-									onClick={() =>
-										arrayHelpers.insert(index + 1, "")
-									} // insert an empty string at a position
+									onClick={() => arrayHelpers.insert(index + 1, "")} // insert an empty string at a position
 								>
 									+
 								</Button>

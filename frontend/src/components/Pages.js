@@ -1,5 +1,5 @@
 import fetchDataPromise from "./helpers/fetchDataPromise";
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 // import { Paper } from "@material-ui/core";
 // import SearchBar from "./SearchBar";
 // import TableWrapper from "./table/Table";

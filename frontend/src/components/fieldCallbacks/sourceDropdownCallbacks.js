@@ -1,6 +1,7 @@
+// values should contain { firstValue, currentValue, newValue }
 const sourceSaveCallback = async (values, _id, name) => {
 	// extract the values
-	const { firstValue, currentValue, newValue } = values;
+	const { currentValue, newValue } = values;
 
 	// construct the url
 	const url = `/api/v1/watch/update/${_id}`;
@@ -42,6 +43,7 @@ const sourceSaveCallback = async (values, _id, name) => {
 	}
 };
 
+// values should contain { firstValue, currentValue, newValue }
 const sourceUndoCallback = async (values, _id, name) => {
 	// extract the values
 	const { firstValue, currentValue, newValue } = values;
@@ -85,9 +87,10 @@ const sourceUndoCallback = async (values, _id, name) => {
 	}
 };
 
+// values should contain { firstValue, currentValue, newValue }
 const sourceDeleteCallback = async (values, _id, name) => {
 	// extract the values
-	const { firstValue, currentValue, newValue } = values;
+	const { currentValue } = values;
 
 	// construct the url
 	const url = `/api/v1/watch/update/${_id}`;

@@ -1,16 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Edit from "./Edit";
 import Display from "./Display";
 import Button from "./fieldButtons/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faEdit,
-	faSave,
-	faTimesCircle,
-	faUndo,
-	faTrashAlt,
-	faPlusCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSave, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import UndoIcon from "@material-ui/icons/Undo";
@@ -33,7 +26,7 @@ const Field = (props) => {
 	} = props;
 
 	const [mode, setMode] = useState(initialMode);
-	const [firstValue, setFirstValue] = useState(value);
+	const firstValue = value;
 	const [currentValue, setCurrentValue] = useState(value);
 	const [newValue, setNewValue] = useState(value);
 

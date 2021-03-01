@@ -6,11 +6,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Dropdown from "../../dropdowns/Dropdown";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import Button from "../../Fields/fieldButtons/Button";
-import tableCellStyles from "../../Fields/TableCell.theme";
 import {
 	modalSaveButtonCallback,
 	modalUndoButtonHandler,
@@ -61,11 +59,6 @@ const notImplemented = () => {
 const ModalContent = (props) => {
 	const [rows, setRows] = React.useState([]);
 	const [source, setSource] = React.useState([]);
-	// const [addRow, setAddRow] = React.useState({
-	// 	url: "",
-	// 	initialMode: "edit",
-	// 	saveMethod: handleSourceAdd,
-	// });
 
 	const formatSourceData = (source) => {
 		return source.map((s) => {
@@ -96,8 +89,8 @@ const ModalContent = (props) => {
 		const result = await sourceAddCallback(value, _id, name);
 		handleUpdateRows();
 		const tempSource = source;
-		const addFieldIndex = source.findIndex((s) => s.url == value.newValue);
-		if (addFieldIndex != -1) {
+		const addFieldIndex = source.findIndex((s) => s.url === value.newValue);
+		if (addFieldIndex !== -1) {
 			console.log(`Updating the source`);
 			tempSource[addFieldIndex].url = value.newValue;
 			setSource([...tempSource]);
@@ -114,6 +107,9 @@ const ModalContent = (props) => {
 		return result;
 	};
 
+	// TODO theres a bug here when you do these things:
+	// add field -> save content in field -> edit field -> save again -> Warning: Can't perform a React state update on an unmounted component.
+	// also happens when you edit an existing field
 	const handleSourceSave = async (values, _id, name) => {
 		const result = await sourceSaveCallback(values, _id, name);
 		await handleUpdateRows();

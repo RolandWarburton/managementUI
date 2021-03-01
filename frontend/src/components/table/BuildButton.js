@@ -5,15 +5,6 @@ const BuildButton = (props) => {
 	const { _id } = props;
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [hasSubmit, setHasSubmit] = useState(false);
-
-	const fakeTimeout = async () => {
-		return await new Promise((resolve) =>
-			setTimeout(() => {
-				resolve({ success: true });
-			}, 1000)
-		);
-	};
 
 	const buildPage = async (_id) => {
 		const buildUrl = `http://blogbuilder/build/${_id}`;
@@ -76,7 +67,6 @@ const BuildButton = (props) => {
 				console.log("done building page");
 				console.log(page);
 				setIsSubmitting(false);
-				setHasSubmit(true);
 			}}
 		>
 			Build

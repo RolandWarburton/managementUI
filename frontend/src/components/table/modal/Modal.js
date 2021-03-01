@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@material-ui/core";
 import ModalContent from "./ModalContent";
 
@@ -10,7 +10,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import withMobileDialog from "@material-ui/core/withMobileDialog";
 
 const deletePageHandler = async (_id) => {
 	const postURL = `/api/v1/watch/delete/${_id}`;
@@ -90,7 +89,9 @@ const Modal = (props) => {
 			>
 				<DialogTitle id="responsive-dialog-title">{props.pageName}</DialogTitle>
 				<DialogContent>
-					<ModalContent rows={rows} _id={props._id} />
+					<DialogContentText>
+						<ModalContent rows={rows} _id={props._id} />
+					</DialogContentText>
 				</DialogContent>
 				<CloseButton handleClose={handleClose} />
 			</Dialog>

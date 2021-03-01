@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { useField, Field } from "formik";
+import { useField } from "formik";
 import { FormControlLabel } from "@material-ui/core";
-import { Checkbox } from "formik-material-ui";
 
 import { BlueCheckbox } from "./MUIStyles";
 
@@ -25,9 +24,7 @@ const MyCheckbox = ({ children, ...props }) => {
 				label="Hidden"
 			/>
 
-			{meta.touched && meta.error ? (
-				<div className="error">{meta.error}</div>
-			) : null}
+			{meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
 		</div>
 	);
 };

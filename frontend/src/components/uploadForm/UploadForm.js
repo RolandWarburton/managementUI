@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, getIn, useFormikContext } from "formik";
+import { Formik, Form, Field, getIn } from "formik";
 import { Button, Container, Paper } from "@material-ui/core";
 import { Fieldset, FormWrapper, SubmitWrapper } from "./UploadForm.styles";
 import { useStyles } from "./MUIStyles";
@@ -60,7 +60,6 @@ const SignupForm = () => {
 		success: false,
 		message: "please wait",
 	});
-	// const { values, submitForm } = useFormikContext();
 
 	return (
 		<Container className={classes.root} maxWidth="md">
