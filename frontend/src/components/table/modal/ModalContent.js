@@ -87,13 +87,17 @@ const ModalContent = (props) => {
 	// the callback will return the result to <Field /> and then refreshes the entire modals data
 	const handleSourceAdd = async (value, _id, name) => {
 		const result = await sourceAddCallback(value, _id, name);
-		handleUpdateRows();
-		const tempSource = source;
-		const addFieldIndex = source.findIndex((s) => s.url === value.newValue);
-		if (addFieldIndex !== -1) {
-			console.log(`Updating the source`);
-			tempSource[addFieldIndex].url = value.newValue;
-			setSource([...tempSource]);
+		handleUpdateRows(); // dont await this - it causes errors where you "Can't perform a React state update on an unmounted component"
+
+		// change the source.url on the newly added field to reflect the new changes we are making
+		if (!result instanceof Error) {
+			const tempSource = source;
+			const addFieldIndex = source.findIndex((s) => s.url === value.newValue);
+			if (addFieldIndex !== -1) {
+				console.log(`Updating the source`);
+				tempSource[addFieldIndex].url = value.newValue;
+				setSource([...tempSource]);
+			}
 		}
 
 		return result;
@@ -103,16 +107,13 @@ const ModalContent = (props) => {
 	// the callback will return the result to <Field /> and then refreshes the entire modals data
 	const handleSourceDelete = async (values, _id, name) => {
 		const result = await sourceDeleteCallback(values, _id, name);
-		await handleUpdateRows();
+		handleUpdateRows(); // dont await this - it causes errors where you "Can't perform a React state update on an unmounted component"
 		return result;
 	};
 
-	// TODO theres a bug here when you do these things:
-	// add field -> save content in field -> edit field -> save again -> Warning: Can't perform a React state update on an unmounted component.
-	// also happens when you edit an existing field
 	const handleSourceSave = async (values, _id, name) => {
 		const result = await sourceSaveCallback(values, _id, name);
-		await handleUpdateRows();
+		handleUpdateRows(); // dont await this - it causes errors where you "Can't perform a React state update on an unmounted component"
 		return result;
 	};
 
