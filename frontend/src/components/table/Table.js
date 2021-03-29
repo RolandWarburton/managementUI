@@ -63,16 +63,10 @@ const TableWrapper = (props) => {
 	return (
 		<>
 			<SearchBar
-				formCallback={(queryString, tag) => {
-					if (!tag) {
-						setSearchFilter(`pageName/${queryString || "placeholder"}`);
-					} else {
-						setSearchFilter(`${tag.key}/${tag.value}`);
-					}
+				formCallback={(queryString) => {
+					setSearchFilter(`pageName/${queryString}`);
 
-					if (!queryString) {
-						setSearchFilter(``);
-					}
+					if (!queryString) setSearchFilter("");
 
 					// set the current page number back to the first page
 					gotoPage(0);
