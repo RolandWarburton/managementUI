@@ -74,7 +74,6 @@ const Table = (props) => {
 													{...cell.row.original}
 													cellID={cell.row.id} // cells ID (1,2,3...)
 												/>
-
 												{/* Build Button */}
 												<BuildButton
 													fullScreen={fullScreen}

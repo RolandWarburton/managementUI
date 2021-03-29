@@ -64,9 +64,9 @@ const TableWrapper = (props) => {
 		<>
 			<SearchBar
 				formCallback={(queryString) => {
-					setSearchFilter(`pageName/${queryString}`);
-
-					if (!queryString) setSearchFilter("");
+					// Set the search filter, this is what we will use in the url to search for
+					// Right now the only thing thats supported is searching by page name
+					setSearchFilter(queryString);
 
 					// set the current page number back to the first page
 					gotoPage(0);

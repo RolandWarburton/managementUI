@@ -39,10 +39,11 @@ export default function Pages() {
 		setLoading(true);
 
 		const json = await fetchDataPromise(pageIndex, pageSize, searchFilter);
+		const { count } = await (await fetch("/api/v1/watch/count", { method: "GET" })).json();
 
 		// set the data from the APIs response
 		// the data that needs to be rendered in <Table/>
-		setData(json.data);
+		setData(json);
 
 		// set the page count from the APIs response
 		// the number of rows, IE 10, 20, 50 etc...
@@ -50,10 +51,12 @@ export default function Pages() {
 
 		// set the Count from the APIs response
 		// the total number of rows within the database, IE 100+
-		setCount(json.count);
+		// ! Replacing json.count for now (83)
+		setCount(count);
 
 		if (!searchFilter) {
-			const pgCount = Math.ceil(parseInt(json.count) / pageSize);
+			// ! Replacing json.count for now (83)
+			const pgCount = Math.ceil(parseInt(count) / pageSize);
 			setPageCount(pgCount);
 			console.log(`the new number of pages is: ${pgCount}`);
 		} else {

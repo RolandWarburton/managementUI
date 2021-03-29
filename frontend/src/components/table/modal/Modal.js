@@ -108,5 +108,6 @@ Modal.propTypes = exact({
 	meta: propTypes.exact({ template: propTypes.string.isRequired }).isRequired,
 	pageName: propTypes.string.isRequired,
 	source: propTypes.array.isRequired,
-	websitePath: propTypes.string.isRequired,
+	websitePath: propTypes.array.isRequired,
+	websitePathLength: propTypes.number.isRequired,
 });
