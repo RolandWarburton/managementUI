@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Formik, Form, Field, getIn } from "formik";
 import { Button, Container, Paper } from "@material-ui/core";
 import { Fieldset, FormWrapper, SubmitWrapper } from "./UploadForm.styles";
-import { useStyles } from "./MUIStyles";
-import validationSchema from "./validation";
-import MyTextInput from "./Input";
-import MyCheckbox from "./Checkbox";
-import MySelect from "./Option";
-import SourcesSection from "./fieldArray";
-import Dropdown from "../dropdowns/Dropdown";
+import { useStyles } from "../formikComponents/MUIStyles";
+import MyTextInput from "../formikComponents/Input";
+import MyCheckbox from "../formikComponents/Checkbox";
+import MySelect from "../formikComponents/Option";
+import SourcesSection from "../formikComponents/fieldArray";
 
 // {
 //     "pageName": "testPage",
@@ -75,7 +73,7 @@ const SignupForm = () => {
 					validateOnChange={false}
 					validateOnBlur={false}
 					validationMount={false}
-					validationSchema={validationSchema}
+					// validationSchema={validationSchema}
 					onSubmit={(values, { setSubmitting }) => {
 						setTimeout(async () => {
 							// alert(JSON.stringify(values, null, 2));

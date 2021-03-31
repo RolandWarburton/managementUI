@@ -51,11 +51,9 @@ export default function Pages() {
 
 		// set the Count from the APIs response
 		// the total number of rows within the database, IE 100+
-		// ! Replacing json.count for now (83)
 		setCount(count);
 
 		if (!searchFilter) {
-			// ! Replacing json.count for now (83)
 			const pgCount = Math.ceil(parseInt(count) / pageSize);
 			setPageCount(pgCount);
 			console.log(`the new number of pages is: ${pgCount}`);

@@ -6,6 +6,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import NavBar from "./components/navigation/navBar";
+import ViewPage from "./components/viewPage/ViewPage";
 
 const Styles = styled.div`
 	color: #dedede;
@@ -31,17 +32,25 @@ const theme = createMuiTheme({
 	},
 });
 
+const Wrapper = styled.div`
+	margin: 50px 15vw;
+	@media screen and (max-width: $medium) {
+		margin: 50px 5vw;
+	}
+`;
+
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Styles>
 				<BrowserRouter basename="/admin">
-					<NavBar position="fixed" />
-					<div className={"wrapper"}>
+					{/* <NavBar position="fixed" /> */}
+					<Wrapper>
 						<Route exact path="/" component={Pages} />
 						<Route exact path="/upload" component={UploadForm} />
-					</div>
+						<Route exact path="/page/:id" component={ViewPage} />
+					</Wrapper>
 				</BrowserRouter>
 			</Styles>
 		</ThemeProvider>

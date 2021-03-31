@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import IconButton from "@material-ui/core/IconButton";
+import SearchButton from "@material-ui/icons/SearchRounded";
 
 const Styles = Styled.form`
 	padding: 0;
@@ -25,7 +25,6 @@ export default function SearchBar(props) {
 	const [queryString, setQueryString] = useState("");
 	const search = (event) => {
 		event.preventDefault();
-
 		props.formCallback(queryString);
 	};
 
@@ -35,14 +34,20 @@ export default function SearchBar(props) {
 				className="input"
 				placeholder="Search"
 				defaultValue=""
-				onSubmit={search}
+				style={{ color: "white", padding: "0 1em" }}
 				onChange={(e) => {
 					setQueryString(e.currentTarget.value);
 				}}
-			></input>
-			<button className="button is-dark" onClick={search}>
-				<FontAwesomeIcon className="has-text-right icon" icon={faSearch} color={"white"} />
-			</button>
+				onKeyDown={(e) => {
+					if (e.key === "Enter") {
+						e.preventDefault();
+						search(e);
+					}
+				}}
+			/>
+			<IconButton aria-label="delete" onClick={search}>
+				<SearchButton />
+			</IconButton>
 		</Styles>
 	);
 }

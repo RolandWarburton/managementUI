@@ -16,7 +16,7 @@ const MyTextInput = ({ label, ...props }) => {
 		<div noValidate autoComplete="off">
 			{/* <label htmlFor={props.id || props.name}>{label}</label> */}
 			<FastField
-				// ? material UI binding to style it as a textfield
+				// ? material UI binding to style it as a text field
 				component={TextField}
 				// styled component props
 				variant="outlined"
@@ -26,9 +26,7 @@ const MyTextInput = ({ label, ...props }) => {
 				{...field}
 				{...props}
 			/>
-			{meta.touched && meta.error ? (
-				<div className="error">{meta.error}</div>
-			) : null}
+			{meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
 		</div>
 	);
 };

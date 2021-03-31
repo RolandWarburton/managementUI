@@ -2,7 +2,6 @@ import React, { useState, useEffect, getIn } from "react";
 import { useFormikContext, FieldArray, Field, FastField, useField } from "formik";
 import { Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
-import { SourceRow } from "./UploadForm.styles";
 import { sourceRowStyles } from "./MUIStyles";
 
 function SourcesSection() {
@@ -22,7 +21,7 @@ function SourcesSection() {
 				<div className={classes.root}>
 					{values.source && values.source.length > 0 ? (
 						values.source.map((source, index) => (
-							<SourceRow key={index}>
+							<div key={index}>
 								<FastField
 									// ? material UI binding to style it as a textfield
 									component={TextField}
@@ -57,7 +56,7 @@ function SourcesSection() {
 									+
 								</Button>
 								{/* </IncrementDecrementButtonGroup> */}
-							</SourceRow>
+							</div>
 						))
 					) : (
 						<Button

@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 // import styled from "styled-components";
 import { useTable, usePagination } from "react-table";
 import styled from "styled-components";
-import Modal from "./modal/Modal";
 import SearchBar from "./SearchBar";
 import { Button } from "@material-ui/core";
 import BuildButton from "./BuildButton";
@@ -69,11 +68,11 @@ const Table = (props) => {
 										<TableCell {...cell.getCellProps()} align={"right"}>
 											<ButtonGroup>
 												{/* Edit Button */}
-												<Modal
+												{/* <BuildButton
 													fullScreen={fullScreen}
 													{...cell.row.original}
-													cellID={cell.row.id} // cells ID (1,2,3...)
-												/>
+													_id={cell.row.original._id}
+												></BuildButton> */}
 												{/* Build Button */}
 												<BuildButton
 													fullScreen={fullScreen}
