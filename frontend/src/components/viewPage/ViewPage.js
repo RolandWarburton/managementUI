@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Form from "./Form";
 
+const unloadedPage = {
+	_id: "waiting",
+	pageName: "waiting",
+	source: [{ url: "waiting", remote: true }],
+	websitePath: ["waiting"],
+	__v: 0,
+	meta: { template: "waiting" },
+};
+
 export default function ViewPage(props) {
 	const _id = props.match.params.id;
 
-	const [page, setPage] = useState({
-		_id: "waiting",
-		pageName: "waiting",
-		source: [{ url: "waiting", remote: true }],
-	});
+	const [page, setPage] = useState(unloadedPage);
 	const [loading, setLoading] = useState(true);
 
 	// ##──── on load ───────────────────────────────────────────────────────────────────────────
