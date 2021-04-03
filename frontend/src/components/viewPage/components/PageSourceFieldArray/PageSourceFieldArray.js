@@ -1,7 +1,7 @@
 import React from "react";
 import { Field } from "formik";
 import { Button } from "@material-ui/core";
-import { useStyles, Error } from "./formStyles";
+import { useStyles, Error } from "../formStyles";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import FieldArrayRow from "./FieldArrayRow";
 

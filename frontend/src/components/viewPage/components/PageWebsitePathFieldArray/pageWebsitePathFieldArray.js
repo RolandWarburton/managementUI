@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { useStyles, Error } from "./formStyles";
+import { useStyles, Error } from "../formStyles";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import websitePathSegment from "./websitePathSegment";
 import IconButton from "@material-ui/core/IconButton";
