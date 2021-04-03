@@ -21,11 +21,4 @@ const validationSchema = Yup.object({
 		.required("Required"),
 });
 
-// websitePath: Yup.array().of(
-// 		Yup.object().shape({
-// 			url: Yup.string().min(1).max(128),
-// 			remote: Yup.boolean(),
-// 		})
-// 	),
-
 export default validationSchema;
