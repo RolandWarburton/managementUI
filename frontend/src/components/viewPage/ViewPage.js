@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Wrapper from "./components/Wrapper";
 import Form from "./Form";
 
 const unloadedPage = {
@@ -14,6 +15,7 @@ export default function ViewPage(props) {
 	const _id = props.match.params.id;
 
 	const [page, setPage] = useState(unloadedPage);
+	const [initialPage, setInitialPage] = useState(undefined);
 	const [loading, setLoading] = useState(true);
 
 	// ##──── on load ───────────────────────────────────────────────────────────────────────────
@@ -28,13 +30,14 @@ export default function ViewPage(props) {
 			.then((data) => {
 				setLoading(false);
 				setPage({ ...page, ...data[0] });
+				setInitialPage(data[0]);
 				return data;
 			});
 	}, [_id]);
 
 	return (
-		<div>
-			<Form page={page} />
-		</div>
+		<Wrapper>
+			<Form page={page} initialPage={initialPage} />
+		</Wrapper>
 	);
 }

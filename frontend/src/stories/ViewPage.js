@@ -3,13 +3,18 @@ import Component from "../components/viewPage/Form";
 
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Wrapper from "../components/viewPage/components/Wrapper";
 import { theme } from "../StyleBaseline";
 
 export const ViewPage = ({ page }) => {
 	return (
+		// Need to wrap the components with the MUI theme
 		<ThemeProvider theme={theme}>
 			<CssBaseline>
-				<Component page={page} />
+				{/* Actual component stuff here */}
+				<Wrapper>
+					<Component page={page} />
+				</Wrapper>
 			</CssBaseline>
 		</ThemeProvider>
 	);

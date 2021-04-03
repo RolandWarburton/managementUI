@@ -5,9 +5,6 @@ import { ViewPage } from "./ViewPage";
 export default {
 	title: "Form/viewPage",
 	component: ViewPage,
-	argTypes: {
-		_id: "5fd5783bf4500b001f1144a7",
-	},
 };
 
 const Template = (args) => <ViewPage {...args} />;

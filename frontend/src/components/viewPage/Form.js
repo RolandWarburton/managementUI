@@ -2,7 +2,6 @@ import React from "react";
 import { Formik, Field, FieldArray } from "formik";
 import { Button } from "@material-ui/core";
 import { Fieldset } from "./components/formStyles";
-import Wrapper from "./components/Wrapper";
 import handleSubmit from "./helpers/handleSubmit";
 import StandardField from "./components/StandardField";
 import PageSourceFieldArray from "./components/PageSourceFieldArray/PageSourceFieldArray";
@@ -11,12 +10,14 @@ import propTypes from "prop-types";
 import exact from "prop-types-exact";
 import validationSchema from "./helpers/validation";
 
-const MyForm = ({ page }) => {
+const MyForm = ({ page, initialPage }) => {
 	return (
 		<Formik
 			initialValues={page}
 			enableReinitialize
-			onSubmit={handleSubmit}
+			onSubmit={(values, { setSubmitting }) => {
+				handleSubmit(values, initialPage, setSubmitting);
+			}}
 			validationSchema={validationSchema}
 			validateOnChange={false}
 		>
@@ -73,12 +74,8 @@ const MyForm = ({ page }) => {
 	);
 };
 
-const Form = ({ page }) => {
-	return (
-		<Wrapper>
-			<MyForm page={page} />
-		</Wrapper>
-	);
+const Form = ({ page, initialPage }) => {
+	return <MyForm page={page} initialPage={initialPage} />;
 };
 export default Form;
 
@@ -90,4 +87,5 @@ Form.propTypes = exact({
 		websitePath: propTypes.array.isRequired,
 		__v: propTypes.number.isRequired,
 	}).isRequired,
+	initialPage: propTypes.object,
 });
