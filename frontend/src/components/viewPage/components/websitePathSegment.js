@@ -9,9 +9,3 @@ const websitePathSegment = ({ field, form, label }) => {
 };
 
 export default websitePathSegment;
-
-{
-	/* <IconButton aria-label="delete" onClick={handleDeleteButton}>
-	<DeleteOutlineIcon />
-</IconButton>; */
-}

@@ -1,5 +1,4 @@
 import React from "react";
-// import { Formik, useFormik, useField, Field, ErrorMessage, FieldArray } from "formik";
 import { Formik, Field, FieldArray } from "formik";
 import { Button } from "@material-ui/core";
 import { Fieldset } from "./components/formStyles";
@@ -10,11 +9,18 @@ import PageSourceFieldArray from "./components/PageSourceFieldArray";
 import PageWebsitePathFieldArray from "./components/pageWebsitePathFieldArray";
 import propTypes from "prop-types";
 import exact from "prop-types-exact";
+import validationSchema from "./helpers/validation";
 
 const MyForm = ({ page }) => {
 	return (
-		<Formik initialValues={page} enableReinitialize onSubmit={handleSubmit}>
-			{({ values, handleChange, handleSubmit }) => (
+		<Formik
+			initialValues={page}
+			enableReinitialize
+			onSubmit={handleSubmit}
+			validationSchema={validationSchema}
+			validateOnChange={false}
+		>
+			{({ values, handleChange, errors, handleSubmit }) => (
 				<form onSubmit={handleSubmit}>
 					<Fieldset>
 						<Field
@@ -22,6 +28,7 @@ const MyForm = ({ page }) => {
 							label="ID"
 							onChange={handleChange}
 							component={StandardField}
+							errors={errors?._id}
 						/>
 
 						<Field
@@ -29,6 +36,7 @@ const MyForm = ({ page }) => {
 							label="Page Name"
 							onChange={handleChange}
 							component={StandardField}
+							errors={errors?.pageName}
 						/>
 
 						<Field
@@ -36,6 +44,7 @@ const MyForm = ({ page }) => {
 							label="Version Number"
 							onChange={handleChange}
 							component={StandardField}
+							errors={errors?.__v}
 						/>
 
 						<Field
@@ -43,6 +52,7 @@ const MyForm = ({ page }) => {
 							label="Template"
 							onChange={handleChange}
 							component={StandardField}
+							errors={errors?.meta?.template}
 						/>
 
 						<FieldArray name="websitePath" component={PageWebsitePathFieldArray} />
@@ -53,7 +63,7 @@ const MyForm = ({ page }) => {
 					</Fieldset>
 
 					<Fieldset>
-						<Button color="primary" variant="contained" type="submit">
+						<Button variant="contained" type="submit">
 							Submit
 						</Button>
 					</Fieldset>
@@ -72,10 +82,7 @@ const Form = ({ page }) => {
 };
 export default Form;
 
-// export default pageForm;
-
 Form.propTypes = exact({
-	// page: propTypes.object.isRequired,
 	page: propTypes.shape({
 		_id: propTypes.string.isRequired,
 		pageName: propTypes.string.isRequired,

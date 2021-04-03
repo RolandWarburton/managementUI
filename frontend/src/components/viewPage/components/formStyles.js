@@ -34,4 +34,9 @@ const Fieldset = styled.fieldset`
 	margin: 1em 0;
 `;
 
-export { useStyles, FieldArrayWrapper, FieldWrapper, Fieldset };
+const Error = styled.div`
+	color: #f44336;
+	font-size: 0.75em;
+`;
+
+export { useStyles, FieldArrayWrapper, FieldWrapper, Fieldset, Error };
