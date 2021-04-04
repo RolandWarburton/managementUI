@@ -7,10 +7,7 @@ import { TablePagination, TableFooter } from "@material-ui/core";
 import { useTable, usePagination } from "react-table";
 import MaUTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableRowColumn from "@material-ui/core/TableRow";
 
 const Loading = styled.tr`
 	grid-column: 1 / -1;
@@ -23,17 +20,15 @@ const Loading = styled.tr`
 const TableWrapper = (props) => {
 	const { columns, data, fetchData, loading, controlledPageCount, count } = props;
 
+	// ? TableJS Props:
+	// getTableProps, getTableBodyProps, gotoPage, page, canPreviousPage, canNextPage, pageOptions,
+	// pageCount, nextPage, previousPage, setPageSize, prepareRow, state: { pageIndex, pageSize },
+
 	const {
 		getTableProps,
 		getTableBodyProps,
 		gotoPage,
 		page,
-		canPreviousPage,
-		canNextPage,
-		pageOptions,
-		pageCount,
-		nextPage,
-		previousPage,
 		setPageSize,
 		prepareRow,
 		state: { pageIndex, pageSize },

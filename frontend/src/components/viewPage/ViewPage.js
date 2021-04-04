@@ -29,15 +29,15 @@ export default function ViewPage(props) {
 			.then((res) => res.json())
 			.then((data) => {
 				setLoading(false);
-				setPage({ ...page, ...data[0] });
-				setInitialPage(data[0]);
+				setPage({ ...data[0] });
+				setInitialPage({ ...data[0] });
 				return data;
 			});
 	}, [_id]);
 
 	return (
 		<Wrapper>
-			<Form page={page} initialPage={initialPage} />
+			<Form loading={loading} page={page} initialPage={initialPage} />
 		</Wrapper>
 	);
 }

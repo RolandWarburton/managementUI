@@ -1,20 +1,11 @@
-import React, { useRef } from "react";
-// import styled from "styled-components";
-import { useTable, usePagination } from "react-table";
+import React from "react";
 import styled from "styled-components";
-import SearchBar from "./SearchBar";
-import { Button } from "@material-ui/core";
 import BuildButton from "./BuildButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 // MUI crap
-import { TablePagination, TableFooter } from "@material-ui/core";
-import MaUTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableRowColumn from "@material-ui/core/TableRow";
 
 // used for the fullscreen media query
 import useMediaQuery from "@material-ui/core/useMediaQuery";

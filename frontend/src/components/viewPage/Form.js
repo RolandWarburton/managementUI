@@ -10,7 +10,7 @@ import propTypes from "prop-types";
 import exact from "prop-types-exact";
 import validationSchema from "./helpers/validation";
 
-const MyForm = ({ page, initialPage }) => {
+const MyForm = ({ page, initialPage, loading }) => {
 	return (
 		<Formik
 			initialValues={page}
@@ -28,7 +28,8 @@ const MyForm = ({ page, initialPage }) => {
 			validationSchema={validationSchema}
 			validateOnChange={false}
 		>
-			{({ status, dirty, submitCount, values, handleChange, errors, handleSubmit }) => (
+			{/* Full list of props in the formik component: https://formik.org/docs/api/formik */}
+			{({ handleChange, errors, handleSubmit }) => (
 				<form onSubmit={handleSubmit}>
 					<Fieldset>
 						<Field
@@ -69,7 +70,7 @@ const MyForm = ({ page, initialPage }) => {
 						<FieldArray name="source" component={PageSourceFieldArray} />
 					</Fieldset>
 					<Fieldset>
-						<Button variant="contained" type="submit">
+						<Button variant="contained" type="submit" disabled={loading}>
 							Submit
 						</Button>
 					</Fieldset>
@@ -79,8 +80,8 @@ const MyForm = ({ page, initialPage }) => {
 	);
 };
 
-const Form = ({ page, initialPage }) => {
-	return <MyForm page={page} initialPage={initialPage} />;
+const Form = ({ page, initialPage, loading }) => {
+	return <MyForm page={page} initialPage={initialPage} loading={loading} />;
 };
 export default Form;
 
@@ -93,4 +94,5 @@ Form.propTypes = exact({
 		__v: propTypes.number.isRequired,
 	}).isRequired,
 	initialPage: propTypes.object,
+	loading: propTypes.bool.isRequired,
 });

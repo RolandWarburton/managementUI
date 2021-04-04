@@ -1,5 +1,5 @@
-import React, { useState, useEffect, getIn } from "react";
-import { useFormikContext, FieldArray, Field, FastField, useField } from "formik";
+import React, { useEffect } from "react";
+import { useFormikContext, FieldArray, FastField } from "formik";
 import { Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { sourceRowStyles } from "./MUIStyles";
@@ -7,7 +7,7 @@ import { sourceRowStyles } from "./MUIStyles";
 function SourcesSection() {
 	// ? include handleSubmit if you want to submit from this component instead of including it in the overall form
 	// ? const { handleSubmit, values } = useFormikContext(); // formikProps
-	const { values, errors } = useFormikContext(); // formikProps
+	const { values } = useFormikContext(); // formikProps
 	const classes = sourceRowStyles();
 
 	useEffect(() => {

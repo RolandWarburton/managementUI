@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Paper } from "@material-ui/core";
+import { Container, Paper } from "@material-ui/core";
 import { useStyles } from "./formStyles";
 
 const Wrapper = ({ children }) => {

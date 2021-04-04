@@ -1,13 +1,13 @@
 import React from "react";
 import { Field } from "formik";
-import { useStyles, Error } from "../formStyles";
+import { Error } from "../formStyles";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import websitePathSegment from "./websitePathSegment";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
-export const MyDynamicForm = ({ move, swap, push, insert, unshift, pop, remove, form }) => {
-	const classes = useStyles();
+// { move, swap, push, insert, unshift, pop, remove, form }
+export const MyDynamicForm = ({ push, remove, form }) => {
 	return (
 		<div>
 			{form.values.websitePath.map((s, i) => {

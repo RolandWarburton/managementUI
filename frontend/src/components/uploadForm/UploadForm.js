@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, getIn } from "formik";
+import { Formik, Form } from "formik";
 import { Button, Container, Paper } from "@material-ui/core";
 import { Fieldset, FormWrapper, SubmitWrapper } from "./UploadForm.styles";
 import { useStyles } from "../formikComponents/MUIStyles";
@@ -15,17 +15,6 @@ import SourcesSection from "../formikComponents/fieldArray";
 //     "hidden": false,
 //     "meta": {"template": "blogPost.ejs"}
 // }
-
-const ErrorMessage = ({ name }) => (
-	<Field
-		name={name}
-		render={({ form }) => {
-			const error = getIn(form.errors, name);
-			const touch = getIn(form.touched, name);
-			return touch && error ? error : null;
-		}}
-	/>
-);
 
 const submitHandler = async ({ pageName, websitePath, hidden, source, meta }) => {
 	const postURL = `/api/v1/watch/upload`;
@@ -157,7 +146,6 @@ const SignupForm = () => {
 										</Button>
 									</SubmitWrapper>
 
-									{/* <ErrorMessage name="source[0].url" /> */}
 									<Paper elevation={3}>
 										<pre>
 											<code>
