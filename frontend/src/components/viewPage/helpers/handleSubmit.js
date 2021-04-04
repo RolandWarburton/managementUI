@@ -43,9 +43,13 @@ const updateRequest = (_id, key, value) => {
 };
 
 const handleSubmit = async (values, initialPage, setSubmitting) => {
+	console.log("handling submit");
 	// If we change one field, say pageName...
 	// Then the resulting difference will be an object with {pageName: "newString"}
 	const difference = diff(initialPage, values);
+
+	// If no fields were changed then return nothing
+	if (!difference) return undefined;
 
 	const names = Object.keys(difference);
 
@@ -109,6 +113,7 @@ const handleSubmit = async (values, initialPage, setSubmitting) => {
 	// TODO some error validation IF a promise responds with a non 200 status!
 	await Promise.all(jobs);
 	setSubmitting(false);
+	return difference;
 };
 
 export default handleSubmit;

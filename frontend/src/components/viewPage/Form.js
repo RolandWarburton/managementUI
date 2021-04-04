@@ -15,14 +15,20 @@ const MyForm = ({ page, initialPage }) => {
 		<Formik
 			initialValues={page}
 			enableReinitialize
-			onSubmit={(values, { setSubmitting }) => {
-				handleSubmit(values, initialPage, setSubmitting);
+			onSubmit={async (values, { setSubmitting }) => {
+				// gets an object of values that were updated
+				const difference = await handleSubmit(values, initialPage, setSubmitting);
+
+				// If a field changed from the last submit. update the initialPage Values to reflect
+				// This fixes a bug where if you change a fields value from original to new then back, the page will not update
+				if (difference) initialPage = values;
 			}}
 			validationSchema={validationSchema}
 			validateOnChange={false}
 		>
-			{({ values, handleChange, errors, handleSubmit }) => (
+			{({ status, dirty, submitCount, values, handleChange, errors, handleSubmit }) => (
 				<form onSubmit={handleSubmit}>
+					status: {status} <br /> dirty: {dirty} <br /> submits: {submitCount}
 					<Fieldset>
 						<Field
 							name="_id"
@@ -58,11 +64,9 @@ const MyForm = ({ page, initialPage }) => {
 
 						<FieldArray name="websitePath" component={PageWebsitePathFieldArray} />
 					</Fieldset>
-
 					<Fieldset>
 						<FieldArray name="source" component={PageSourceFieldArray} />
 					</Fieldset>
-
 					<Fieldset>
 						<Button variant="contained" type="submit">
 							Submit
