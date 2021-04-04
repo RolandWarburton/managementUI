@@ -17,18 +17,19 @@ const MyForm = ({ page, initialPage }) => {
 			enableReinitialize
 			onSubmit={async (values, { setSubmitting }) => {
 				// gets an object of values that were updated
-				const difference = await handleSubmit(values, initialPage, setSubmitting);
+				const difference = await handleSubmit(values, initialPage);
 
 				// If a field changed from the last submit. update the initialPage Values to reflect
 				// This fixes a bug where if you change a fields value from original to new then back, the page will not update
 				if (difference) initialPage = values;
+
+				setSubmitting(false);
 			}}
 			validationSchema={validationSchema}
 			validateOnChange={false}
 		>
 			{({ status, dirty, submitCount, values, handleChange, errors, handleSubmit }) => (
 				<form onSubmit={handleSubmit}>
-					status: {status} <br /> dirty: {dirty} <br /> submits: {submitCount}
 					<Fieldset>
 						<Field
 							name="_id"

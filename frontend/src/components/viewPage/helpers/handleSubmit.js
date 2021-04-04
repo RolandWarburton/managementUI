@@ -42,7 +42,7 @@ const updateRequest = (_id, key, value) => {
 	return fetch(url, { method: "PATCH", headers, body });
 };
 
-const handleSubmit = async (values, initialPage, setSubmitting) => {
+const handleSubmit = async (values, initialPage) => {
 	console.log("handling submit");
 	// If we change one field, say pageName...
 	// Then the resulting difference will be an object with {pageName: "newString"}
@@ -112,7 +112,6 @@ const handleSubmit = async (values, initialPage, setSubmitting) => {
 	// wait for everything to finish and we are good!
 	// TODO some error validation IF a promise responds with a non 200 status!
 	await Promise.all(jobs);
-	setSubmitting(false);
 	return difference;
 };
 
