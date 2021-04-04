@@ -14,7 +14,7 @@ const MyForm = ({ page, initialPage, loading }) => {
 	return (
 		<Formik
 			initialValues={page}
-			enableReinitialize
+			// enableReinitialize
 			onSubmit={async (values, { setSubmitting }) => {
 				// gets an object of values that were updated
 				const difference = await handleSubmit(values, initialPage);

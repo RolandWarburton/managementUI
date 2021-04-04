@@ -26,8 +26,15 @@ const theme = createMuiTheme({
 });
 
 const Wrapper = styled.div`
-	margin: 50px 15vw;
-	@media screen and (max-width: $medium) {
+	color: #dedede;
+	font-size: calc(10px + 1.5vmin);
+	margin: 50px 0vw; // mobile
+	/* background-color: #424242; */
+	/* height: 100vh; */
+	/* position: fixed;
+	top: 0;
+	right: 0; */
+	@media screen and (min-width: 600px) {
 		margin: 50px 5vw;
 	}
 `;

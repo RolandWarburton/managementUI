@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import BuildButton from "./BuildButton";
-import { makeStyles } from "@material-ui/core/styles";
+import { tableStyles } from "./tableStyles";
+import { useHistory } from "react-router-dom";
 
 // MUI crap
 import TableCell from "@material-ui/core/TableCell";
@@ -19,21 +20,9 @@ const Loading = styled.tr`
 	}
 `;
 
-const ButtonGroup = styled.div`
-	// width: 50%;
-	display: flex;
-	justify-content: space-evenly;
-`;
-
-const tableStyles = makeStyles({
-	root: {
-		// display: "grid",
-		// gridTemplateColumns: "0.5fr 1fr 2fr 10% 10%",
-	},
-});
-
 const Table = (props) => {
 	const classes = tableStyles();
+	const history = useHistory();
 
 	// when bp small or below fullScreen is true
 	const theme = useTheme();
@@ -46,41 +35,28 @@ const Table = (props) => {
 			{page.map((row, i) => {
 				prepareRow(row);
 				return (
-					<TableRow {...row.getRowProps()} className={classes.root}>
+					<TableRow
+						{...row.getRowProps()}
+						className={classes.tableRowCursor}
+						// className={(classes.table, classes.tableRowCursor)}
+						onClick={(e) =>
+							history.push(`/page/${row.original._id}`, { page: row.original })
+						}
+					>
 						{row.cells.map((cell, i) => {
 							// store the return value
 							let output;
 
 							// figure out if we are displaying buttons or content
 							switch (cell.column.Header) {
-								// ##──── Edit and Build Buttons ────────────────────────────────────────────────────────────
-								case "Buttons":
-									output = (
-										<TableCell {...cell.getCellProps()} align={"right"}>
-											<ButtonGroup>
-												{/* Edit Button */}
-												{/* <BuildButton
-													fullScreen={fullScreen}
-													{...cell.row.original}
-													_id={cell.row.original._id}
-												></BuildButton> */}
-												{/* Build Button */}
-												<BuildButton
-													fullScreen={fullScreen}
-													{...cell.row.original}
-													_id={cell.row.original._id}
-												>
-													Build
-												</BuildButton>
-											</ButtonGroup>
-										</TableCell>
-									);
-									break;
-
 								// ##──── Index Column ──────────────────────────────────────────────────────────────────────
 								case "Index":
 									output = (
-										<TableCell {...cell.getCellProps()}>
+										<TableCell
+											{...cell.getCellProps()}
+											// className={classes.table.cell}
+											size="small"
+										>
 											{cell.row.index}
 										</TableCell>
 									);
@@ -89,7 +65,11 @@ const Table = (props) => {
 								// ##──── Whatever data is in the cell ──────────────────────────────────────────────────────
 								default:
 									output = (
-										<TableCell {...cell.getCellProps()}>
+										<TableCell
+											{...cell.getCellProps()}
+											// className={classes.table}
+											size="small"
+										>
 											{cell.render("Cell")}
 										</TableCell>
 									);
@@ -98,6 +78,7 @@ const Table = (props) => {
 							return output;
 						})}
 					</TableRow>
+					// </Link>
 				);
 			})}
 			<Loading>{loading && <td></td>}</Loading>

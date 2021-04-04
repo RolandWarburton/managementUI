@@ -5,9 +5,13 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "block",
 		width: "100%",
+		height: "100%",
 		"& > *": {
 			padding: theme.spacing(4),
 		},
+		// [theme.breakpoints.up("md")]: {
+		// 	backgroundColor: theme.palette.secondary.main,
+		// },
 	},
 	textField: {
 		width: "100%",

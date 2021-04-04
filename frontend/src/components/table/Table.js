@@ -2,12 +2,13 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import styled from "styled-components";
 import TableRows from "./TableRows";
+import { tableStyles } from "./tableStyles";
+import Wrapper from "../viewPage/components/Wrapper";
 
 import { TablePagination, TableFooter } from "@material-ui/core";
 import { useTable, usePagination } from "react-table";
 import MaUTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
+import { TableHead, TableCell, TableRow, TableBody } from "@material-ui/core";
 
 const Loading = styled.tr`
 	grid-column: 1 / -1;
@@ -18,6 +19,7 @@ const Loading = styled.tr`
 `;
 
 const TableWrapper = (props) => {
+	const classes = tableStyles();
 	const { columns, data, fetchData, loading, controlledPageCount, count } = props;
 
 	// ? TableJS Props:
@@ -36,12 +38,14 @@ const TableWrapper = (props) => {
 		{
 			columns,
 			data,
-			initialState: { pageIndex: 0 }, // Pass our hoisted table state
+			initialState: { pageIndex: 0, pageSize: 15 }, // Pass our hoisted table state
 			manualPagination: true,
 			pageCount: controlledPageCount, // the number of rows
 		},
 		usePagination
 	);
+
+	console.log(pageSize);
 
 	const [searchFilter, setSearchFilter] = React.useState("");
 
@@ -52,11 +56,11 @@ const TableWrapper = (props) => {
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {
 		console.log(`the searchFilter is: ${searchFilter}`);
-		fetchData({ pageIndex, pageSize, searchFilter });
+		fetchData({ pageIndex, pageSize, searchFilter, setPageSize });
 	}, [fetchData, pageIndex, pageSize, searchFilter]);
 
 	return (
-		<>
+		<Wrapper>
 			<SearchBar
 				formCallback={(queryString) => {
 					// Set the search filter, this is what we will use in the url to search for
@@ -69,6 +73,19 @@ const TableWrapper = (props) => {
 			/>
 
 			<MaUTable {...getTableProps()}>
+				<TableHead>
+					<TableRow className={classes.table}>
+						<TableCell size="small" align="left">
+							Index
+						</TableCell>
+						<TableCell size="small" align="left">
+							ID
+						</TableCell>
+						<TableCell size="small" align="left">
+							Name
+						</TableCell>
+					</TableRow>
+				</TableHead>
 				<TableBody {...getTableBodyProps()}>
 					{/* table guts are rendered here */}
 					<TableRows page={page} loading={loading} prepareRow={prepareRow}></TableRows>
@@ -80,7 +97,7 @@ const TableWrapper = (props) => {
 						{/* https://material-ui.com/api/table-pagination/#tablepagination-api */}
 						<TablePagination
 							className="pagination"
-							rowsPerPageOptions={[1, 10, 20, 50, { label: "All", value: -1 }]}
+							rowsPerPageOptions={[1, 10, 15, 20, 50, { label: "All", value: -1 }]}
 							count={count} // The total number of rows.
 							page={pageIndex} // The zero-based index of the current page.
 							rowsPerPage={pageSize}
@@ -96,7 +113,7 @@ const TableWrapper = (props) => {
 					</TableRow>
 				</TableFooter>
 			</MaUTable>
-		</>
+		</Wrapper>
 	);
 };
 

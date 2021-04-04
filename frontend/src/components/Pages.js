@@ -12,6 +12,8 @@ export default function Pages() {
 	const [pageCount, setPageCount] = useState(0);
 	const [count, setCount] = useState(-1);
 
+	let userHasChangedPageSize = false;
+
 	const columns = useMemo(
 		() => [
 			{
@@ -26,46 +28,44 @@ export default function Pages() {
 				Header: "page Name",
 				accessor: "pageName",
 			},
-			{
-				Header: "Buttons",
-				accessor: "",
-			},
 		],
 		[]
 	);
 
 	// This will get called when the table needs new data
-	const fetchData = React.useCallback(async ({ pageSize, pageIndex, searchFilter }) => {
-		setLoading(true);
+	const fetchData = React.useCallback(
+		async ({ pageSize, pageIndex, searchFilter, setPageSize }) => {
+			setLoading(true);
 
-		const json = await fetchDataPromise(pageIndex, pageSize, searchFilter);
-		const { count } = await (await fetch("/api/v1/watch/count", { method: "GET" })).json();
+			const json = await fetchDataPromise(pageIndex, pageSize, searchFilter);
+			const { count } = await (await fetch("/api/v1/watch/count", { method: "GET" })).json();
 
-		// set the data from the APIs response
-		// the data that needs to be rendered in <Table/>
-		setData(json);
+			// set the data from the APIs response
+			// the data that needs to be rendered in <Table/>
+			setData(json);
 
-		// set the page count from the APIs response
-		// the number of rows, IE 10, 20, 50 etc...
-		setPageCount(json.length);
+			// set the page count from the APIs response
+			// the number of rows, IE 10, 20, 50 etc...
+			setPageCount(json.length);
 
-		// set the Count from the APIs response
-		// the total number of rows within the database, IE 100+
-		setCount(count);
+			// set the Count from the APIs response
+			// the total number of rows within the database, IE 100+
+			setCount(count);
 
-		if (!searchFilter) {
-			const pgCount = Math.ceil(parseInt(count) / pageSize);
-			setPageCount(pgCount);
-			console.log(`the new number of pages is: ${pgCount}`);
-		} else {
-			// if there is a filter (we are searching for a page) then only show page numbers for those results
-			const pgCount = Math.ceil(parseInt(json.length) / pageSize);
-			setPageCount(pgCount);
-			console.log(`the new number of pages is: ${pgCount}`);
-		}
+			if (!searchFilter) {
+				const pgCount = Math.ceil(parseInt(count) / pageSize);
+				setPageCount(pgCount);
+			} else {
+				// if there is a filter (we are searching for a page) then only show page numbers for those results
+				const pgCount = Math.ceil(parseInt(json.length) / pageSize);
+				setPageCount(pgCount);
+			}
+			console.log(`the new number of pages is: ${pageCount}`);
 
-		setLoading(false);
-	}, []);
+			setLoading(false);
+		},
+		[]
+	);
 
 	return (
 		<Table
