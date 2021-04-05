@@ -1,6 +1,5 @@
 import React from "react";
 import Component from "../components/viewPage/Form";
-
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Wrapper from "../components/viewPage/components/Wrapper";
