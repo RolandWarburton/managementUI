@@ -1,5 +1,5 @@
 import React from "react";
-import Pages from "./components/Pages";
+import Table from "./components/table/Table";
 import UploadForm from "./components/uploadForm/UploadForm";
 import { BrowserRouter, Route } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -15,7 +15,7 @@ function App() {
 				<BrowserRouter basename="/admin">
 					{/* <NavBar position="fixed" /> */}
 					<Wrapper>
-						<Route exact path="/" component={Pages} />
+						<Route exact path="/" component={Table} />
 						<Route exact path="/upload" component={UploadForm} />
 						<Route exact path="/page/:id" component={ViewPage} />
 					</Wrapper>

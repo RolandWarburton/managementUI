@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import fetchDataPromise from "../helpers/fetchDataPromise";
 import SearchBar from "./SearchBar";
 import styled from "styled-components";
 import TableRows from "./TableRows";
@@ -20,7 +21,30 @@ const Loading = styled.tr`
 
 const TableWrapper = (props) => {
 	const classes = tableStyles();
-	const { columns, data, fetchData, loading, controlledPageCount, count } = props;
+
+	const [searchFilter, setSearchFilter] = React.useState("");
+	const [data, setData] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [pageCount, setPageCount] = useState(0);
+	const [count, setCount] = useState(-1);
+
+	const columns = useMemo(
+		() => [
+			{
+				Header: "Index",
+				accessor: "i",
+			},
+			{
+				Header: "ID",
+				accessor: "_id",
+			},
+			{
+				Header: "page Name",
+				accessor: "pageName",
+			},
+		],
+		[]
+	);
 
 	// ? TableJS Props:
 	// getTableProps, getTableBodyProps, gotoPage, page, canPreviousPage, canNextPage, pageOptions,
@@ -40,24 +64,51 @@ const TableWrapper = (props) => {
 			data,
 			initialState: { pageIndex: 0, pageSize: 15 }, // Pass our hoisted table state
 			manualPagination: true,
-			pageCount: controlledPageCount, // the number of rows
+			pageCount: pageCount, // the number of rows
 		},
 		usePagination
 	);
-
-	console.log(pageSize);
-
-	const [searchFilter, setSearchFilter] = React.useState("");
 
 	const handleChangePage = (event, newPage) => {
 		gotoPage(newPage);
 	};
 
 	// Listen for changes in pagination and use the state to fetch our new data
-	React.useEffect(() => {
+	useEffect(() => {
 		console.log(`the searchFilter is: ${searchFilter}`);
-		fetchData({ pageIndex, pageSize, searchFilter, setPageSize });
-	}, [fetchData, pageIndex, pageSize, searchFilter]);
+		const effect = async () => {
+			setLoading(true);
+
+			const json = await fetchDataPromise(pageIndex, pageSize, searchFilter);
+			const { count } = await (await fetch("/api/v1/watch/count", { method: "GET" })).json();
+
+			// set the data from the APIs response
+			// the data that needs to be rendered in <Table/>
+			setData(json);
+
+			// set the page count from the APIs response
+			// the number of rows, IE 10, 20, 50 etc...
+			setPageCount(json.length);
+
+			// set the Count from the APIs response
+			// the total number of rows within the database, IE 100+
+			setCount(count);
+
+			if (!searchFilter) {
+				const pgCount = Math.ceil(parseInt(count) / pageSize);
+				setPageCount(pgCount);
+			} else {
+				// if there is a filter (we are searching for a page) then only show page numbers for those results
+				const pgCount = Math.ceil(parseInt(json.length) / pageSize);
+				setPageCount(pgCount);
+			}
+			console.log(`the new number of pages is: ${pageCount}`);
+
+			setLoading(false);
+		};
+		effect();
+		// fetchData({ pageIndex, pageSize, searchFilter });
+	}, [pageIndex, pageSize, searchFilter]);
 
 	return (
 		<Wrapper>
