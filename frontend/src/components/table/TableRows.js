@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import BuildButton from "./BuildButton";
 import { tableStyles } from "./tableStyles";
 import { useHistory } from "react-router-dom";
 
-// MUI crap
+// MUI stuff
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 
