@@ -1,4 +1,4 @@
-export default async (pageIndex, pageSize, searchFilter) => {
+const fetchDataPromise = async (pageIndex, pageSize, searchFilter) => {
 	const pagination = `page=${pageIndex || 0}&per_page=${pageSize || 1}`;
 
 	let url = `/api/v1/watch/page?pageName=${searchFilter}&${pagination}`;
@@ -9,3 +9,5 @@ export default async (pageIndex, pageSize, searchFilter) => {
 	const json = await response.json();
 	return json;
 };
+
+export default fetchDataPromise;
