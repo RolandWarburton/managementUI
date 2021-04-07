@@ -1,18 +1,16 @@
-# "homepage": "https://blog.rolandw.dev/admin",
-version: '3'
+version: "3"
 services:
     # react frontend management ui for development
     management:
-        build: 
+        build:
             context: .
-            dockerfile: dockerfile.dev
-        # https://github.com/facebook/create-react-app/issues/8688
-        stdin_open: true
+            dockerfile: dockerfile
+        stdin_open: true # https://github.com/facebook/create-react-app/issues/8688
         container_name: management_dev
         expose:
             - "4000"
         volumes:
-          - ./frontend/src:/usr/src/app/src
+            - ./frontend/src:/usr/src/app/src
 
 networks:
     default:
