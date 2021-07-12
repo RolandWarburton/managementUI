@@ -10,8 +10,8 @@ RUN npm install
 
 # Bundle app source
 COPY ./frontend /usr/src/app
-# RUN npm run build
 
 # Exports
 EXPOSE 4000
+
 CMD [ "npm", "run", "start:client" ]

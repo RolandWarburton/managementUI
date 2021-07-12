@@ -1,0 +1,10 @@
+version: "3.0"
+services:
+    management:
+        stdin_open: true # https://github.com/facebook/create-react-app/issues/8688
+        expose:
+            - "4000"
+        ports:
+            - "4000:4000"
+        volumes:
+            - ./frontend:/usr/src/app

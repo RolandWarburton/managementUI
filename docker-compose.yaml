@@ -1,18 +1,19 @@
 version: "3"
 services:
-    # react frontend management ui for development
     management:
         build:
             context: .
             dockerfile: dockerfile
-        stdin_open: true # https://github.com/facebook/create-react-app/issues/8688
-        container_name: management_dev
-        expose:
-            - "4000"
+        container_name: management_ui
         volumes:
-            - ./frontend/src:/usr/src/app/src
+            - blog_content:/dist
 
 networks:
     default:
         external:
             name: gateway_network
+
+# Using `external: true` causes docker to complain if the volume does not exist
+volumes:
+    blog_content:
+        external: true
